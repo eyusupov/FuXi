@@ -235,7 +235,7 @@ class ReteNetwork:
             self.inferredFacts.namespace_manager = namespace_manager
         else:
             self.inferredFacts = inferredTarget
-        self.workingMemory = initialWorkingMemory and initialWorkingMemory or set()
+        self.workingMemory = initialWorkingMemory or set()
         self.proofTracers = {}
         self.terminalNodes = set()
         self.instantiations = {}
@@ -765,73 +765,10 @@ class ReteNetwork:
         matchedPatterns = HashablePatternList()
         attachedPatterns = []
         # hasBuiltin = False
-        LHS = []
-        while True:
-            try:
-                currentPattern = next(lhsIterator)
-
-                # The LHS isn't done yet, stow away the current pattern
-                # We need to convert the Uniterm into a triple
-                if isinstance(currentPattern, Uniterm):
-                    currentPattern = currentPattern.toRDFTuple()
-                LHS.append(currentPattern)
-            except StopIteration:
-                # The LHS is done, need to initiate second pass to recursively build join / beta
-                # nodes towards a terminal node
-
-                # We need to convert the Uniterm into a triple
-                consequents = [
-                    isinstance(fact, Uniterm) and fact.toRDFTuple() or fact for fact in rhsIterator]
-                if matchedPatterns and matchedPatterns in self.nodes:
-                    attachedPatterns.append(matchedPatterns)
-                elif matchedPatterns:
-                    rt = self._findPatterns(matchedPatterns)
-                    attachedPatterns.extend(rt)
-                if len(attachedPatterns) == 1:
-                    node = self.nodes[attachedPatterns[0]]
-                    if isinstance(node, BetaNode):
-                        terminalNode = node
-                    else:
-                        paddedLHSPattern = HashablePatternList(
-                            [None]) + attachedPatterns[0]
-                        terminalNode = self.nodes.get(paddedLHSPattern)
-                        if terminalNode is None:
-                            # New terminal node
-                            terminalNode = BetaNode(None, node, aPassThru=True)
-                            self.nodes[paddedLHSPattern] = terminalNode
-                            node.connectToBetaNode(terminalNode, RIGHT_MEMORY)
-                    terminalNode.consequent.update(consequents)
-                    terminalNode.rules.add(rule)
-                    terminalNode.antecedent = rule.formula.body
-                    terminalNode.network = self
-                    terminalNode.headAtoms.update(rule.formula.head)
-                    terminalNode.filter = aFilter
-                    self.terminalNodes.add(terminalNode)
-                else:
-                    moveToEnd = []
-                    # endIdx = len(attachedPatterns) - 1
-                    finalPatternList = []
-                    for idx, pattern in enumerate(attachedPatterns):
-                        assert isinstance(
-                            pattern, HashablePatternList), repr(pattern)
-                        currNode = self.nodes[pattern]
-                        if (isinstance(currNode, BuiltInAlphaNode) or
-                                isinstance(currNode, BetaNode) and currNode.fedByBuiltin):
-                            moveToEnd.append(pattern)
-                        else:
-                            finalPatternList.append(pattern)
-                    terminalNode = self.attachBetaNodes(
-                        chain(finalPatternList, moveToEnd))
-                    terminalNode.consequent.update(consequents)
-                    terminalNode.rules.add(rule)
-                    terminalNode.antecedent = rule.formula.body
-                    terminalNode.network = self
-                    terminalNode.headAtoms.update(rule.formula.head)
-                    terminalNode.filter = aFilter
-                    self.terminalNodes.add(terminalNode)
-                    self._resetinstantiationStats()
-                # self.checkDuplicateRules()
-                return terminalNode
+        for currentPattern in lhsIterator:
+            # We need to convert the Uniterm into a triple
+            if isinstance(currentPattern, Uniterm):
+                currentPattern = currentPattern.toRDFTuple()
             if HashablePatternList([currentPattern]) in self.nodes:
                 # Current pattern matches an existing alpha node
                 matchedPatterns.append(currentPattern)
@@ -869,6 +806,63 @@ class ReteNetwork:
                 self.nodes[HashablePatternList([currentPattern])] = newNode
                 # Add to list of attached patterns for the second pass
                 attachedPatterns.append(HashablePatternList([currentPattern]))
+
+        # The LHS is done, need to initiate second pass to recursively build join / beta
+        # nodes towards a terminal node
+
+        # We need to convert the Uniterm into a triple
+        consequents = [
+            isinstance(fact, Uniterm) and fact.toRDFTuple() or fact for fact in rhsIterator]
+        if matchedPatterns and matchedPatterns in self.nodes:
+            attachedPatterns.append(matchedPatterns)
+        elif matchedPatterns:
+            rt = self._findPatterns(matchedPatterns)
+            attachedPatterns.extend(rt)
+        if len(attachedPatterns) == 1:
+            node = self.nodes[attachedPatterns[0]]
+            if isinstance(node, BetaNode):
+                terminalNode = node
+            else:
+                paddedLHSPattern = HashablePatternList(
+                    [None]) + attachedPatterns[0]
+                terminalNode = self.nodes.get(paddedLHSPattern)
+                if terminalNode is None:
+                    # New terminal node
+                    terminalNode = BetaNode(None, node, aPassThru=True)
+                    self.nodes[paddedLHSPattern] = terminalNode
+                    node.connectToBetaNode(terminalNode, RIGHT_MEMORY)
+            terminalNode.consequent.update(consequents)
+            terminalNode.rules.add(rule)
+            terminalNode.antecedent = rule.formula.body
+            terminalNode.network = self
+            terminalNode.headAtoms.update(rule.formula.head)
+            terminalNode.filter = aFilter
+            self.terminalNodes.add(terminalNode)
+        else:
+            moveToEnd = []
+            # endIdx = len(attachedPatterns) - 1
+            finalPatternList = []
+            for idx, pattern in enumerate(attachedPatterns):
+                assert isinstance(
+                    pattern, HashablePatternList), repr(pattern)
+                currNode = self.nodes[pattern]
+                if (isinstance(currNode, BuiltInAlphaNode) or
+                        isinstance(currNode, BetaNode) and currNode.fedByBuiltin):
+                    moveToEnd.append(pattern)
+                else:
+                    finalPatternList.append(pattern)
+            terminalNode = self.attachBetaNodes(
+                chain(finalPatternList, moveToEnd))
+            terminalNode.consequent.update(consequents)
+            terminalNode.rules.add(rule)
+            terminalNode.antecedent = rule.formula.body
+            terminalNode.network = self
+            terminalNode.headAtoms.update(rule.formula.head)
+            terminalNode.filter = aFilter
+            self.terminalNodes.add(terminalNode)
+            self._resetinstantiationStats()
+        # self.checkDuplicateRules()
+        return terminalNode
 
     def attachBetaNodes(self, patternIterator, lastBetaNodePattern=None):
         """
