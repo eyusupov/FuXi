@@ -22,13 +22,6 @@ import unittest
 from pprint import pprint
 from .AlphaNode import AlphaNode, BuiltInAlphaNode, ReteToken
 from .Node import Node
-# from RuleStore import N3Builtin
-# from IteratorAlgebra import hash_join
-# from Util import xcombine
-# from ReteVocabulary import RETE_NS
-
-# from rdflib.graph import QuotedGraph, Graph
-# from rdflib.collection import Collection
 
 from rdflib import (
     BNode,
