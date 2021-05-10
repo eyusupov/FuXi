@@ -1,5 +1,5 @@
 from rdflib import Graph, RDF, URIRef
-from FuXi.Syntax.InfixOWL import OWL_NS, Class
+from rdflib.extras.infixowl import OWL_NS, Class
 
 # local source:
 # galenGraph = Graph().parse(
