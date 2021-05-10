@@ -282,6 +282,8 @@ class ReteNetwork:
     def buildFilterNetworkFromClause(self, rule):
         lhs = BNode()
         rhs = BNode()
+        lhs_formula = self.ruleStore.formulae.setdefault(lhs, Formula(lhs))
+        rhs_formula = self.ruleStore.formulae.setdefault(rhs, Formula(lhs))
         builtins = []
         for term in rule.formula.body:
             if isinstance(term, N3Builtin):
@@ -290,23 +292,19 @@ class ReteNetwork:
                 # the corresponding network
                 builtins.append(term)
             else:
-                self.ruleStore.formulae.setdefault(
-                    lhs, Formula(lhs)).append(term.toRDFTuple())
+                lhs_formula.append(term.toRDFTuple())
         for builtin in builtins:
-            self.ruleStore.formulae.setdefault(
-                lhs, Formula(lhs)).append(builtin.toRDFTuple())
+            lhs_formula.append(builtin.toRDFTuple())
         nonEmptyHead = False
         for term in rule.formula.head:
             nonEmptyHead = True
             assert not hasattr(term, 'next')
             assert isinstance(term, Uniterm)
-            self.ruleStore.formulae.setdefault(
-                rhs, Formula(rhs)).append(term.toRDFTuple())
+            rhs_formula.append(term.toRDFTuple())
         assert nonEmptyHead, "Filters must conclude something."
-        self.ruleStore.rules.append(
-            (self.ruleStore.formulae[lhs], self.ruleStore.formulae[rhs]))
-        tNode = self.buildNetwork(iter(self.ruleStore.formulae[lhs]),
-                                  iter(self.ruleStore.formulae[rhs]),
+        self.ruleStore.rules.append((lhs_formula, rhs_formula))
+        tNode = self.buildNetwork(iter(lhs_formula),
+                                  iter(rhs_formula),
                                   rule,
                                   aFilter=True)
         self.rules.add(rule)
@@ -781,8 +779,6 @@ class ReteNetwork:
 
                 self.nodes[currentHashablePatternList] = newNode
                 newBetaNode.connectIncomingNodes(existingNode, newNode)
-                # Extend the match list with the current pattern and add it
-                # to the list of attached patterns for the second pass
                 attachedPatterns.append(matchedPatterns)
                 matchedPatterns = HashablePatternList()
             else:
@@ -824,7 +820,6 @@ class ReteNetwork:
             self.terminalNodes.add(terminalNode)
         else:
             moveToEnd = []
-            # endIdx = len(attachedPatterns) - 1
             finalPatternList = []
             for pattern in attachedPatterns:
                 assert isinstance(
