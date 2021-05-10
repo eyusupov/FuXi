@@ -46,7 +46,7 @@ from FuXi.Rete.SidewaysInformationPassing import GetArgs, GetVariables, SIPRepre
 from FuXi.Rete.SidewaysInformationPassing import iterCondition, GetOp
 from FuXi.Rete.BetaNode import ReteMemory, BetaNode, RIGHT_MEMORY, LEFT_MEMORY
 from FuXi.Rete.AlphaNode import AlphaNode, ReteToken, BuiltInAlphaNode
-from FuXi.Rete.Network import HashablePatternList, InferredGoal, iteritems
+from FuXi.Rete.Network import HashablePatternList, InferredGoal
 from FuXi.Rete.Proof import MakeImmutableDict
 from FuXi.Rete.Magic import AdornedRule, AdornedUniTerm, IsHybridPredicate
 from FuXi.Rete.Util import generateTokenSet
@@ -338,7 +338,7 @@ class QueryExecution(object):
                 wme = ReteToken(
                     tuple([term for term in fact.toRDFTuple()]), debug=debug)
                 wmeCopy = copy.deepcopy(wme)
-                for termComb, termDict in iteritems(self.bfp.metaInterpNetwork.alphaPatternHash):
+                for termComb, termDict in self.bfp.metaInterpNetwork.alphaPatternHash.items():
                     for alphaNode in termDict.get(wmeCopy.alphaNetworkHash(termComb), []):
                         alphaNode.activate(wmeCopy)
                 wme.bindVariables(AlphaNode(queryLiteral.toRDFTuple()))

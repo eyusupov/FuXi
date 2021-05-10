@@ -92,18 +92,6 @@ Any = None
 LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
 
 
-# From itertools recipes
-def iteritems(mapping):
-    return list(zip(iter(list(mapping.keys())), iter(list(mapping.values()))))
-
-
-def any(seq, pred=None):
-    """Returns True if pred(x) is true for at least one element in the iterable"""
-    for elem in filter(pred, seq):
-        return True
-    return False
-
-
 class HashablePatternList(object):
 
     """
@@ -687,7 +675,7 @@ class ReteNetwork:
         end
         """
         # print(wme.asTuple())
-        for termComb, termDict in iteritems(self.alphaPatternHash):
+        for termComb, termDict in self.alphaPatternHash.items():
             for alphaNode in termDict.get(wme.alphaNetworkHash(termComb), []):
                 # print("\t## Activated AlphaNode ##")
                 # print("\t\t", termComb, wme.alphaNetworkHash(termComb))

@@ -38,25 +38,6 @@ from rdflib import (
 )
 
 
-# From itertools recipes
-def iteritems(mapping):
-    return list(zip(iter(list(mapping.keys())), iter(list(mapping.values()))))
-
-
-def any(seq, pred=None):
-    """Returns True if pred(x) is true for at least one element in the iterable"""
-    for elem in filter(pred, seq):
-        return True
-    return False
-
-
-def all(seq, pred=None):
-    "Returns True if pred(x) is true for every element in the iterable"
-    for elem in filterfalse(pred, seq):
-        return False
-    return True
-
-
 def fillBindings(terms, bindings):
     for term in terms:
         if isinstance(term, Variable):
