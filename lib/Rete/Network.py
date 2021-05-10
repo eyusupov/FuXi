@@ -244,6 +244,8 @@ class ReteNetwork:
         self.ruleStore = ruleStore
         self.justifications = {}
         self.dischargedBindings = {}
+        self.alphaNodes = []
+        self.alphaBuiltinNodes = []
         if not dontFinalize:
             self.ruleStore._finalize()
         self.filteredFacts = Graph()
@@ -263,10 +265,6 @@ class ReteNetwork:
                 " self.buildNetworkClause(HornFromN3(n3graph)) for instance",
                 DeprecationWarning, 2)
             self.buildNetworkFromClause(rule)
-        self.alphaNodes = [
-            node for node in list(self.nodes.values()) if isinstance(node, AlphaNode)]
-        self.alphaBuiltInNodes = [node for node in list(
-            self.nodes.values()) if isinstance(node, BuiltInAlphaNode)]
         self._setupDefaultRules()
         if initialWorkingMemory:
             start = time.time()
@@ -311,8 +309,6 @@ class ReteNetwork:
                                   iter(self.ruleStore.formulae[rhs]),
                                   rule,
                                   aFilter=True)
-        self.alphaNodes = [
-            node for node in list(self.nodes.values()) if isinstance(node, AlphaNode)]
         self.rules.add(rule)
         return tNode
 
@@ -320,6 +316,8 @@ class ReteNetwork:
         lhs = BNode()
         rhs = BNode()
         builtins = []
+        lhs_formula = self.ruleStore.formulae.setdefault(lhs, Formula(lhs))
+        rhs_formula = self.ruleStore.formulae.setdefault(rhs, Formula(lhs))
         for term in rule.formula.body:
             if isinstance(term, N3Builtin):
                 # We want to move builtins to the 'end' of the body
@@ -327,31 +325,23 @@ class ReteNetwork:
                 # the corresponding network
                 builtins.append(term)
             else:
-                self.ruleStore.formulae.setdefault(
-                    lhs, Formula(lhs)).append(term.toRDFTuple())
+                lhs_formula.append(term.toRDFTuple())
         for builtin in builtins:
-            self.ruleStore.formulae.setdefault(
-                lhs, Formula(lhs)).append(builtin.toRDFTuple())
-        nonEmptyHead = False
+            lhs_formula.append(builtin.toRDFTuple())
+        emptyHead = True
         for term in rule.formula.head:
-            nonEmptyHead = True
+            emptyHead = False
             assert not hasattr(term, 'next')
             assert isinstance(term, Uniterm)
-            self.ruleStore.formulae.setdefault(
-                rhs, Formula(rhs)).append(term.toRDFTuple())
-        if not nonEmptyHead:
+            rhs_formula.append(term.toRDFTuple())
+        if emptyHead:
             import warnings
             warnings.warn(
                 "Integrity constraints (rules with empty heads) are not supported: %s" % rule,
                 SyntaxWarning, 2)
             return
-        self.ruleStore.rules.append(
-            (self.ruleStore.formulae[lhs], self.ruleStore.formulae[rhs]))
-        tNode = self.buildNetwork(iter(self.ruleStore.formulae[lhs]),
-                                  iter(self.ruleStore.formulae[rhs]),
-                                  rule)
-        self.alphaNodes = [
-            node for node in list(self.nodes.values()) if isinstance(node, AlphaNode)]
+        self.ruleStore.rules.append((lhs_formula, rhs_formula))
+        tNode = self.buildNetwork(iter(lhs_formula), iter(rhs_formula), rule)
         self.rules.add(rule)
         return tNode
 
@@ -483,10 +473,6 @@ class ReteNetwork:
                               iter(rule.formula.head),
                               rule)
             self.rules.add(rule)
-        self.alphaNodes = [
-            node for node in list(self.nodes.values()) if isinstance(node, AlphaNode)]
-        self.alphaBuiltInNodes = [node for node in list(
-            self.nodes.values()) if isinstance(node, BuiltInAlphaNode)]
 
     def __repr__(self):
         total = 0
@@ -714,6 +700,7 @@ class ReteNetwork:
         """
         if isinstance(currentPattern, N3Builtin):
             node = BuiltInAlphaNode(currentPattern)
+            self.alphaBuiltinNodes.append(node)
         else:
             node = AlphaNode(currentPattern, self.ruleStore.filters)
         self.alphaPatternHash[node.alphaNetworkHash()].setdefault(
@@ -722,6 +709,8 @@ class ReteNetwork:
             s, p, o = currentPattern
             node = BuiltInAlphaNode(
                 N3Builtin(p, self.ruleStore.filters[p](s, o), s, o))
+            self.alphaBuiltinNodes.append(node)
+        self.alphaNodes.append(node)
         return node
 
     def _resetinstantiationStats(self):
