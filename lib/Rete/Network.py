@@ -555,19 +555,6 @@ class ReteNetwork:
         # newTokens = []
         termNode.instanciatingTokens.add(tokens)
 
-        def iterCondition(condition):
-            if isinstance(condition, Exists):
-                return condition.formula
-            return isinstance(condition, SetOperator) and condition or iter([condition])
-
-        def extractVariables(term, existential=True):
-            if isinstance(term, existential and BNode or Variable):
-                yield term
-            elif isinstance(term, Uniterm):
-                for t in term.toRDFTuple():
-                    if isinstance(t, existential and BNode or Variable):
-                        yield t
-
         # replace existentials in the head with new BNodes!
         BNodeReplacement = {}
         for rule in termNode.rules:
