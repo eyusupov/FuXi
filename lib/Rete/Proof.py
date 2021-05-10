@@ -16,7 +16,7 @@ except:
 try:
     from itertools import filterfalse
 except ImportError:
-    from itertools import ifilterfalse as filterfalse
+    from itertools import filterfalse as filterfalse
 # from FuXi.Syntax.InfixOWL import *
 from FuXi.Horn.PositiveConditions import (
     buildUniTerm,
@@ -40,7 +40,7 @@ from rdflib import (
 
 # From itertools recipes
 def iteritems(mapping):
-    return list(zip(iter(mapping.keys()), iter(mapping.values())))
+    return list(zip(iter(list(mapping.keys())), iter(list(mapping.values()))))
 
 
 def any(seq, pred=None):

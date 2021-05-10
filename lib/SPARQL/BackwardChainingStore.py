@@ -160,9 +160,9 @@ class TopDownSPARQLEntailingStore(Store):
         for hybridPred in self.hybridPredicates:
             self.derivedPredicates.remove(hybridPred)
             if isinstance(self.derivedPredicates, list):
-                self.derivedPredicates.append(URIRef(hybridPred + u'_derived'))
+                self.derivedPredicates.append(URIRef(hybridPred + '_derived'))
             elif isinstance(self.derivedPredicates, set):
-                self.derivedPredicates.add(URIRef(hybridPred + u'_derived'))
+                self.derivedPredicates.add(URIRef(hybridPred + '_derived'))
             else:
                 import warnings
                 warnings.warn(
@@ -181,8 +181,7 @@ class TopDownSPARQLEntailingStore(Store):
             self.edb.nsMap[key] = uri
 
     def invokeDecisionProcedure(self, tp, factGraph, bindings, debug, sipCollection):
-        isNotGround = first(filter(
-                            lambda i: isinstance(i, Variable), tp))
+        isNotGround = first([i for i in tp if isinstance(i, Variable)])
         rule_store, rule_graph, network = SetupRuleStore(makeNetwork=True)
         bfp = BackwardFixpointProcedure(
             factGraph,
@@ -260,7 +259,7 @@ class TopDownSPARQLEntailingStore(Store):
                     lit = BuildUnitermFromTuple(tp)
                     op = GetOp(lit)
                     if op in self.hybridPredicates:
-                        lit.setOperator(URIRef(op + u'_derived'))
+                        lit.setOperator(URIRef(op + '_derived'))
                         tp = lit.toRDFTuple()
 
                 sipCollection = PrepareSipCollection(self.edb.adornedProgram)
@@ -368,7 +367,7 @@ class TopDownSPARQLEntailingStore(Store):
                         lit = BuildUnitermFromTuple(goal)
                         op = GetOp(lit)
                         if op in self.hybridPredicates:
-                            lit.setOperator(URIRef(op + u'_derived'))
+                            lit.setOperator(URIRef(op + '_derived'))
                             goal = lit.toRDFTuple()
 
                     sipCollection = PrepareSipCollection(
@@ -421,7 +420,7 @@ class TopDownSPARQLEntailingStore(Store):
             goals.append((s, p, o))
             dPred = o if p == RDF.type else p
             if dPred in self.hybridPredicates:
-                dPreds.add(URIRef(dPred + u'_derived'))
+                dPreds.add(URIRef(dPred + '_derived'))
             else:
                 dPreds.add(p == RDF.type and o or p)
         if set(dPreds).intersection(self.derivedPredicates):

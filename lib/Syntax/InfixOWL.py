@@ -169,7 +169,7 @@ nsBinds = {
 
 def generateQName(graph, uri):
     prefix, uri, localName = graph.compute_qname(classOrIdentifier(uri))
-    return u':'.join([prefix, localName])
+    return ':'.join([prefix, localName])
 
 
 def classOrTerm(thing):
@@ -221,24 +221,24 @@ def manchesterSyntax(thing, store, boolean=None, transientList=False):
             if named:
                 def castToQName(x):
                     prefix, uri, localName = store.compute_qname(x)
-                    return u':'.join([prefix, localName])
+                    return ':'.join([prefix, localName])
 
                 if len(named) > 1:
-                    prefix = u'( ' + u' AND '.join(
-                        map(castToQName, named)) + u' )'
+                    prefix = '( ' + ' AND '.join(
+                        map(castToQName, named)) + ' )'
                 else:
                     prefix = manchesterSyntax(named[0], store)
                 if childList:
-                    return prefix + u' THAT ' + u' AND '.join(
+                    return prefix + ' THAT ' + ' AND '.join(
                         [manchesterSyntax(x, store) for x in childList])
                 else:
                     return prefix
             else:
-                return u'( ' + u' AND '.join([str(c) for c in children]) + u' )'
+                return '( ' + ' AND '.join([str(c) for c in children]) + ' )'
         elif boolean == OWL_NS.unionOf:
-            return u'( ' + u' OR '.join([str(c) for c in children]) + u' )'
+            return '( ' + ' OR '.join([str(c) for c in children]) + ' )'
         elif boolean == OWL_NS.oneOf:
-            return u'{ ' + u' '.join([str(c) for c in children]) + u' }'
+            return '{ ' + ' '.join([str(c) for c in children]) + ' }'
         else:
             assert boolean == OWL_NS.complementOf
     elif OWL_NS.Restriction in store.objects(
@@ -246,25 +246,25 @@ def manchesterSyntax(thing, store, boolean=None, transientList=False):
         prop = list(
             store.objects(subject=thing, predicate=OWL_NS.onProperty))[0]
         prefix, uri, localName = store.compute_qname(prop)
-        propString = u':'.join([prefix, localName])
+        propString = ':'.join([prefix, localName])
         label = first(store.objects(subject=prop, predicate=RDFS.label))
         if label:
-            propString = u"'%s'" % label
+            propString = "'%s'" % label
         for onlyClass in store.objects(subject=thing, predicate=OWL_NS.allValuesFrom):
-            return u'( %s ONLY %s )' % (propString, manchesterSyntax(onlyClass, store))
+            return '( %s ONLY %s )' % (propString, manchesterSyntax(onlyClass, store))
         for val in store.objects(subject=thing, predicate=OWL_NS.hasValue):
-            return u'( %s VALUE %s )' % (propString, manchesterSyntax(val.encode('utf-8', 'ignore'), store))
+            return '( %s VALUE %s )' % (propString, manchesterSyntax(val.encode('utf-8', 'ignore'), store))
         for someClass in store.objects(subject=thing, predicate=OWL_NS.someValuesFrom):
-            return u'( %s SOME %s )' % (propString, manchesterSyntax(someClass, store))
+            return '( %s SOME %s )' % (propString, manchesterSyntax(someClass, store))
         cardLookup = {
             OWL_NS.maxCardinality: 'MAX',
             OWL_NS.minCardinality: 'MIN',
             OWL_NS.cardinality: 'EQUALS'}
         for s, p, o in store.triples_choices((thing, list(cardLookup.keys()), None)):
-            return u'( %s %s %s )' % (propString, cardLookup[p], o.encode('utf-8', 'ignore'))
+            return '( %s %s %s )' % (propString, cardLookup[p], o.encode('utf-8', 'ignore'))
     compl = list(store.objects(subject=thing, predicate=OWL_NS.complementOf))
     if compl:
-        return u'( NOT %s )' % (manchesterSyntax(compl[0], store))
+        return '( NOT %s )' % (manchesterSyntax(compl[0], store))
     else:
         for boolProp, col in store.query("SELECT ?p ?bool WHERE { ?class a owl:Class; ?p ?bool . ?bool rdf:first ?foo }",
                                          initBindings={
@@ -274,12 +274,12 @@ def manchesterSyntax(thing, store, boolean=None, transientList=False):
                 return manchesterSyntax(col, store, boolean=boolProp)
         try:
             prefix, uri, localName = store.compute_qname(thing)
-            qname = u':'.join([prefix, localName])
+            qname = ':'.join([prefix, localName])
         except Exception:
             if isinstance(thing, BNode):
                 return thing.n3()
-            return u"<" + thing + u">"
-            print(list(store.objects(subject=thing, predicate=RDF.type)))
+            return "<" + thing + ">"
+            print((list(store.objects(subject=thing, predicate=RDF.type))))
             raise
             return '[]'  # +thing._id.encode('utf-8')+'</em>'
         label = first(Class(thing, graph=store).label)
@@ -335,7 +335,7 @@ class Individual(object):
             try:
                 prefix, uri, localName = self.graph.compute_qname(
                     self.identifier)
-                self.qname = u':'.join([prefix, localName])
+                self.qname = ':'.join([prefix, localName])
             except:
                 pass
 
@@ -407,7 +407,7 @@ class Individual(object):
         if not isinstance(i, BNode):
             try:
                 prefix, uri, localName = self.graph.compute_qname(i)
-                self.qname = u':'.join([prefix, localName])
+                self.qname = ':'.join([prefix, localName])
             except:
                 pass
 
@@ -1869,7 +1869,7 @@ class Property(AnnotatibleTerms):
     def __repr__(self):
         rt = []
         if OWL_NS.ObjectProperty in self.type:
-            rt.append(u'ObjectProperty( %s annotation(%s)' % (
+            rt.append('ObjectProperty( %s annotation(%s)' % (
                 self.qname, first(self.comment)
                 and first(self.comment) or ''))
             if first(self.inverseOf):
@@ -1878,14 +1878,14 @@ class Property(AnnotatibleTerms):
                     inverseRepr = first(self.inverseOf).qname
                 else:
                     inverseRepr = repr(first(self.inverseOf))
-                rt.append(u"  inverseOf( %s )%s" % (inverseRepr,
-                                                    OWL_NS.SymmetricProperty in self.type and u' Symmetric' or u''))
+                rt.append("  inverseOf( %s )%s" % (inverseRepr,
+                                                    OWL_NS.SymmetricProperty in self.type and ' Symmetric' or ''))
             for s, p, roleType in self.graph.triples_choices((self.identifier,
                                                               RDF.type,
                                                               [OWL_NS.FunctionalProperty,
                                                                OWL_NS.InverseFunctionalProperty,
                                                                OWL_NS.TransitiveProperty])):
-                rt.append(unicode(roleType.split(OWL_NS)[-1]))
+                rt.append(str(roleType.split(OWL_NS)[-1]))
         else:
             rt.append('DatatypeProperty( %s %s' % (
                 self.qname, first(self.comment)
@@ -1893,30 +1893,30 @@ class Property(AnnotatibleTerms):
             for s, p, roleType in self.graph.triples((self.identifier,
                                                       RDF.type,
                                                       OWL_NS.FunctionalProperty)):
-                rt.append(u'   Functional')
+                rt.append('   Functional')
 
         def canonicalName(term, g):
             normalizedName = classOrIdentifier(term)
             if isinstance(normalizedName, BNode):
                 return term
             elif normalizedName.startswith(_XSD_NS):
-                return unicode(term)
+                return str(term)
             elif first(g.triples_choices((
                 normalizedName,
                 [OWL_NS.unionOf,
                        OWL_NS.intersectionOf], None))):
                 return repr(term)
             else:
-                return unicode(term.qname)
-        rt.append(u' '.join([u"   super( %s )" % canonicalName(superP, self.graph)
+                return str(term.qname)
+        rt.append(' '.join(["   super( %s )" % canonicalName(superP, self.graph)
                              for superP in self.subPropertyOf]))
-        rt.append(u' '.join([u"   domain( %s )" % canonicalName(domain, self.graph)
+        rt.append(' '.join(["   domain( %s )" % canonicalName(domain, self.graph)
                              for domain in self.domain]))
-        rt.append(u' '.join([u"   range( %s )" % canonicalName(range, self.graph)
+        rt.append(' '.join(["   range( %s )" % canonicalName(range, self.graph)
                              for range in self.range]))
-        rt = u'\n'.join([expr for expr in rt if expr])
-        rt += u'\n)'
-        return unicode(rt).encode('utf-8')
+        rt = '\n'.join([expr for expr in rt if expr])
+        rt += '\n)'
+        return str(rt).encode('utf-8')
 
     def _get_subPropertyOf(self):
         for anc in self.graph.objects(subject=self.identifier, predicate=RDFS.subPropertyOf):

@@ -8,7 +8,7 @@ from io import StringIO
 
 rule_store, rule_graph, network = SetupRuleStore(makeNetwork=True)
 
-rules = u"""
+rules = """
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 { ?x owl:sameAs ?y } => { ?y owl:sameAs ?x } .
 { ?x owl:sameAs ?y . ?x ?p ?o } => { ?y ?p ?o } .

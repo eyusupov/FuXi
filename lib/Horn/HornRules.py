@@ -228,16 +228,13 @@ class Rule(object):
         from FuXi.Rete.SidewaysInformationPassing import GetArgs, iterCondition
         assert isinstance(self.formula.head, (Exists, Atomic)), \
             "Safety can only be checked on rules in normal form"
-        for var in filter(lambda term: isinstance(term,
-                                                  (Variable, BNode)),
-                          GetArgs(self.formula.head)):
+        for var in [term for term in GetArgs(self.formula.head) if isinstance(term,
+                                                  (Variable, BNode))]:
             if not self.formula.body.isSafeForVariable(var):
                 return False
-        for var in filter(
-            lambda term: isinstance(term, (Variable, BNode)),
-            reduce(lambda l, r: l + r,
+        for var in [term for term in reduce(lambda l, r: l + r,
                    [GetArgs(lit)
-                    for lit in iterCondition(self.formula.body)])):
+                    for lit in iterCondition(self.formula.body)]) if isinstance(term, (Variable, BNode))]:
             if not self.formula.body.binds(var):
                 return False
         return True
@@ -253,7 +250,7 @@ class Rule(object):
         us'{ ?C rdfs:subClassOf ?SC .\\n ?M a ?C } => { ?M a ?SC }'
 
         """
-        return u'{ %s } => { %s }' % (self.formula.body.n3(),
+        return '{ %s } => { %s }' % (self.formula.body.n3(),
                                       self.formula.head.n3())
         # "Forall %s ( %r )"%(' '.join([var.n3() for var in self.declare]),
         #                        self.formula)
@@ -369,7 +366,7 @@ class Clause(object):
         return "%r :- %r" % (self.head, self.body)
 
     def n3(self):
-        return u'{ %s } => { %s }' % (self.body.n3(), self.head.n3())
+        return '{ %s } => { %s }' % (self.body.n3(), self.head.n3())
 
 
 def test():

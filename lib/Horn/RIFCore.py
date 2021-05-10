@@ -10,7 +10,7 @@ trail.
 """
 
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import logging
 from lxml import etree
 from rdflib.graph import Graph
@@ -36,16 +36,16 @@ __all__ = [
 ]
 
 
-class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
+class SmartRedirectHandler(urllib.request.HTTPRedirectHandler):
 
     def http_error_301(self, req, fp, code, msg, headers):
-        result = urllib2.HTTPRedirectHandler.http_error_301(
+        result = urllib.request.HTTPRedirectHandler.http_error_301(
             self, req, fp, code, msg, headers)
         result.status = code
         return result
 
     def http_error_302(self, req, fp, code, msg, headers):
-        result = urllib2.HTTPRedirectHandler.http_error_302(
+        result = urllib.request.HTTPRedirectHandler.http_error_302(
             self, req, fp, code, msg, headers)
         result.status = code
         return result
@@ -116,7 +116,7 @@ SELECT ?atom ?args ?op {
 }
 """
 
-rif_namespaces = {u'rif': RIF_NS}
+rif_namespaces = {'rif': RIF_NS}
 
 
 class RIFCoreParser(object):
@@ -134,17 +134,17 @@ class RIFCoreParser(object):
             if debug:
                 _debug("RIF document URL provided %s" % location)
             if self.location.find('http:') + 1:
-                req = urllib2.Request(self.location)
+                req = urllib.request.Request(self.location)
 
                 # From:
                 # http://www.diveintopython.org/http_web_services/redirects.html
                 # points an 'opener' to the address to 'sniff' out final
                 # Location header
-                opener = urllib2.build_opener(SmartRedirectHandler())
+                opener = urllib.request.build_opener(SmartRedirectHandler())
                 f = opener.open(req)
                 self.content = f.read()
             else:
-                self.content = urllib2.urlopen(self.location).read()
+                self.content = urllib.request.urlopen(self.location).read()
                 # self.content = open(self.location).read()
             try:
                 transform = etree.XSLT(etree.parse(TRANSFORM_URI))
@@ -212,7 +212,7 @@ class RIFCoreParser(object):
     def extractRule(self, rule):
         vars, impl = self.rules[rule]
         body, bodyType, head, headType = self.implications[impl]
-        allVars = map(self.extractTerm, Collection(self.graph, vars))
+        allVars = list(map(self.extractTerm, Collection(self.graph, vars)))
         head = first(self.extractPredication(head, headType))
         if bodyType == RIF_NS.And:
             body = [first(self.extractPredication(

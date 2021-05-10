@@ -37,7 +37,7 @@ class UnionSkolemizedTest(unittest.TestCase):
         p = network.setupDescriptionLogicProgramming(self.tBoxGraph)
         for p in p:
             if hasattr(p.formula.body, 'arg'):
-                self.failIf(
+                self.assertFalse(
                     p.formula.body.arg[-1].find(SKOLEMIZED_CLASS_NS) > -1,
                     "Rule has a skolem term when it shouldn't!: %s" % p)
             else:

@@ -71,7 +71,7 @@ SKOLEMIZED_CLASS_NS = Namespace(
     'http://code.google.com/p/python-dlp/wiki/SkolemTerm#')
 
 non_DHL_OWL_Semantics = \
-    u"""
+    """
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
@@ -203,7 +203,7 @@ class Clause(OriginalClause):
         return "%r :- %r" % (self.head, self.body)
 
     def n3(self):
-        return u'{ %s } => { %s }' % (self.body.n3(), self.head.n3())
+        return '{ %s } => { %s }' % (self.body.n3(), self.head.n3())
 
 
 def makeRule(clause, nsMap):
@@ -442,10 +442,8 @@ def ExtendN3Rules(network, horn_clause, constructNetwork=False):
 def PrepareHeadExistential(clause):
     from FuXi.Rete.SidewaysInformationPassing import GetArgs
     skolemsInHead = [
-        list(filter(
-            lambda term:isinstance(term,
-                                   BNode),
-            GetArgs(lit)))
+        list([term for term in GetArgs(lit) if isinstance(term,
+                                   BNode)])
         for lit in iterCondition(clause.head)]
     skolemsInHead = reduce(lambda x, y: x + y, skolemsInHead, [])
     if skolemsInHead:
@@ -492,10 +490,8 @@ def PrepareHornClauseForRETE(horn_clause):
         horn_clause.head = newHead
 
     skolemsInBody = [
-        list(filter(
-            lambda term:isinstance(term,
-                                   BNode),
-            GetArgs(lit)))
+        list([term for term in GetArgs(lit) if isinstance(term,
+                                   BNode)])
         for lit in iterCondition(horn_clause.body)]
     skolemsInBody = reduce(lambda x, y: x + y, skolemsInBody,
                            [])

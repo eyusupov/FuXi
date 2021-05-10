@@ -4,7 +4,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 from rdflib import Graph, Literal, Namespace, Variable
 # from rdflib.graph import Graph
 # from rdflib import RDF, RDFS, Namespace, Variable, Literal, URIRef, BNode
@@ -16,14 +16,14 @@ from FuXi.Rete.RuleStore import SetupRuleStore
 FOAF = Namespace('http://xmlns.com/foaf/0.1/')
 EX = Namespace('http://example.com/#')
 
-N3_PROGRAM = u"""\
+N3_PROGRAM = """\
 @prefix m: <http://example.com/#>.
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 { ?person foaf:mbox ?email } => { ?person foaf:mbox_sha1sum rdf:Literal } ."""
-N3_FACTS = u"""\
+N3_FACTS = """\
 @prefix m: <http://example.com/#>.
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -63,7 +63,7 @@ class ReteActionTest(unittest.TestCase):
         network.registerReteAction(matchingHeadTriple, False, encodeAction)
         network.feedFactsToAdd(generateTokenSet(factGraph))
         print(network.inferredFacts.serialize(format='n3'))
-        self.failUnless(resultingTriple in network.inferredFacts)
+        self.assertTrue(resultingTriple in network.inferredFacts)
 
 if __name__ == "__main__":
     unittest.main()

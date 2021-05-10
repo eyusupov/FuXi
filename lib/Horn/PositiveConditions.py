@@ -135,8 +135,7 @@ class And(QNameManager, SetOperator, Condition):
         >>> conj.binds(Variable('Z'))
         False
         """
-        return first(filter(lambda conj: conj.binds(var),
-                            self.formulae)) is not None
+        return first([conj for conj in self.formulae if conj.binds(var)]) is not None
 
     def isSafeForVariable(self, var):
         """
@@ -157,8 +156,7 @@ class And(QNameManager, SetOperator, Condition):
         True
 
         """
-        return first(filter(lambda conj: conj.isSafeForVariable(var),
-                            self.formulae)) is not None
+        return first([conj for conj in self.formulae if conj.isSafeForVariable(var)]) is not None
 
     def n3(self):
         """
@@ -174,7 +172,7 @@ class And(QNameManager, SetOperator, Condition):
 #            [g.add(term.toRDFTuple()) for term in self]
 #            return g.serialize(format='n3')
 #        else:
-        return u' .\n '.join([i.n3() for i in self])
+        return ' .\n '.join([i.n3() for i in self])
 
     def __repr__(self):
         return self.repr('And')
@@ -512,14 +510,14 @@ class Uniterm(QNameManager, Atomic):
         try:
             rt = self.nsMgr.qname(val)
             if len(rt.split(':')[0]) > 1 and rt[0] == '_':
-                return u':' + rt.split(':')[-1]
+                return ':' + rt.split(':')[-1]
             else:
                 return rt
 
         except:
             for prefix, uri in self.nsMgr.namespaces():
                 if val.startswith(uri):
-                    return u'%s:%s' % (prefix, val.split(uri)[-1])
+                    return '%s:%s' % (prefix, val.split(uri)[-1])
             return val
 
     def normalizeTerm(self, term):

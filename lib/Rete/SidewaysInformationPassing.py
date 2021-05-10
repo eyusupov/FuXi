@@ -36,7 +36,7 @@ MAGIC = Namespace('http://doi.acm.org/10.1145/28659.28689#')
 
 def makeMD5Digest(value):
     return md5(
-        isinstance(value, unicode) and value.encode('utf-8')
+        isinstance(value, str) and value.encode('utf-8')
         or value).hexdigest()
 
 
@@ -67,7 +67,7 @@ def RenderSIPCollection(sipGraph, dot=None):
     nodes = {}
     for N, prop, q in sipGraph.query(
             'SELECT ?N ?prop ?q {  ?prop a magic:SipArc . ?N ?prop ?q . }',
-            initNs={u'magic': MAGIC}):
+            initNs={'magic': MAGIC}):
 
         if MAGIC.BoundHeadPredicate in sipGraph.objects(
                 subject=N, predicate=RDF.type):
@@ -358,14 +358,13 @@ def BuildNaturalSIP(clause,
                 except InvalidSIPException:
                     foundSip = False
         else:
-            if first(filter(lambda i: isinstance(i, Uniterm) and i.naf or False,
-                            clause.body)):
+            if first([i for i in clause.body if isinstance(i, Uniterm) and i.naf or False]):
                 # There are negative literals in body, ensure
                 # the given sip order puts negated literals at the end
                 bodyOrder = first(
-                    filter(ProperSipOrderWithNegation,
+                    list(filter(ProperSipOrderWithNegation,
                            findFullSip(([clause.head], None),
-                                       clause.body)))
+                                       clause.body))))
             else:
                 bodyOrder = first(
                     findFullSip(([clause.head], None), clause.body))
@@ -387,7 +386,7 @@ def BuildNaturalSIP(clause,
         collectionsToClear = []
         for N, prop, q in sipGraph.query(
                 'SELECT ?N ?prop ?q {  ?prop a magic:SipArc . ?N ?prop ?q . }',
-                initNs={u'magic': MAGIC}):
+                initNs={'magic': MAGIC}):
             if occurLookup[q] not in derivedPreds and (
                 occurLookup[
                     q] not in hybridPreds2Replace if hybridPreds2Replace else False
@@ -410,7 +409,7 @@ def SIPRepresentation(sipGraph):
     rt = []
     for N, prop, q in sipGraph.query(
             'SELECT ?N ?prop ?q {  ?prop a magic:SipArc . ?N ?prop ?q . }',
-            initNs={u'magic': MAGIC}):
+            initNs={'magic': MAGIC}):
         if MAGIC.BoundHeadPredicate in sipGraph.objects(subject=N, predicate=RDF.type):
             NCol = [N]
         else:

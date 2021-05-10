@@ -6,7 +6,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 from rdflib import Graph, Namespace
 from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.Rete.Util import generateTokenSet
@@ -21,7 +21,7 @@ expected_triples = [
     (EX.jack, EX_TERMS.has_brother, EX.john),
 ]
 
-ABOX = u"""\
+ABOX = """\
 @prefix exterms: <http://example.org/terms/> .
 @prefix : <http://example.org/> .
 
@@ -29,7 +29,7 @@ ABOX = u"""\
 :jack exterms:brother     :john .
 """
 
-TBOX = u"""\
+TBOX = """\
 @prefix exterms: <http://example.org/terms/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -87,7 +87,7 @@ class test_superproperty_entailment(unittest.TestCase):
 
         print('Checking...')
         for triple in expected_triples:
-            self.failUnless(
+            self.assertTrue(
                 triple in self.network.inferredFacts, "Missing %s" % (
                     repr(triple)))
 

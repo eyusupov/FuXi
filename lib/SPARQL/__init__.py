@@ -113,7 +113,7 @@ def renderTerm(graph, term, predTerm=False):
     elif isinstance(term, URIRef):
         qname = normalizeUri(term, hasattr(graph, 'revNsMap') and graph.revNsMap or
                              dict([(u, p) for p, u in graph.namespaces()]))
-        return qname[0] == '_' and u"<%s>" % term or qname
+        return qname[0] == '_' and "<%s>" % term or qname
     elif isinstance(term, Literal):
         return term.n3()
     else:

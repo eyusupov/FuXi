@@ -13,8 +13,8 @@ from FuXi.Horn.PositiveConditions import Uniterm
 from FuXi.Horn.HornRules import Rule, Clause
 
 nsBindings = {
-    u'bfp': BFP_NS,
-    u'rule': BFP_RULE
+    'bfp': BFP_NS,
+    'rule': BFP_RULE
 }
 
 
@@ -25,7 +25,7 @@ class testSeralizationOfEvalTests(unittest.TestCase):
                                [BFP_RULE[str(1)],
                                 Literal(1)],
                                newNss=nsBindings)
-        self.failUnless(repr(evaluateTerm), "bfp:evaluate(rule:1 1)")
+        self.assertTrue(repr(evaluateTerm), "bfp:evaluate(rule:1 1)")
         xVar = Variable('X')
         yVar = Variable('Y')
         bodyTerm = Uniterm(RDF.rest,

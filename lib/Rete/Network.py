@@ -24,7 +24,7 @@ from pprint import pprint
 try:
     from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 from .BetaNode import (
     BetaNode,
@@ -94,7 +94,7 @@ LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
 
 # From itertools recipes
 def iteritems(mapping):
-    return list(zip(iter(mapping.keys()), iter(mapping.values())))
+    return list(zip(iter(list(mapping.keys())), iter(list(mapping.values()))))
 
 
 def any(seq, pred=None):
@@ -463,7 +463,7 @@ class ReteNetwork:
     def reportSize(self, tokenSizeThreshold=1200, stream=sys.stdout):
         for pattern, node in list(self.nodes.items()):
             if isinstance(node, BetaNode):
-                for largeMem in [i for i in iter(node.memories.values()) if len(i) > tokenSizeThreshold]:
+                for largeMem in [i for i in iter(list(node.memories.values())) if len(i) > tokenSizeThreshold]:
                     if largeMem:
                         print("Large apha node memory extent: ")
                         pprint(pattern)

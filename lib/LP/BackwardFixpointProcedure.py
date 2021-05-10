@@ -33,7 +33,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 from pprint import pprint
 
@@ -473,8 +473,8 @@ class BackwardFixpointProcedure(object):
         self.bfpLookup = {}
         self.actionHash = {}
         self.namespaces = {
-            u'bfp': BFP_NS,
-            u'rule': BFP_RULE
+            'bfp': BFP_NS,
+            'rule': BFP_RULE
         }
         self.metaInterpNetwork = network
         self.derivedPredicates = set(derivedPredicates) if \

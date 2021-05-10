@@ -12,7 +12,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from cStringIO import StringIO
+    from io import StringIO
 
 rules = """\
 @prefix : <fam.n3#>.

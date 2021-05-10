@@ -11,14 +11,14 @@ exNs = Namespace('http://dev.w3.org/2000/10/swap/test/cwm/fam.n3#')
 rules = HornFromN3('http://dev.w3.org/2000/10/swap/test/cwm/fam-rules.n3')
 factGraph = Graph().parse(
     'http://dev.w3.org/2000/10/swap/test/cwm/fam.n3', format='n3')
-factGraph.bind(u'ex', exNs)
+factGraph.bind('ex', exNs)
 dPreds = [exNs.ancestor]
 
 # Then we setup the RETE-UL network that will be used for calculating the
 # closure (or fixpoint) of the magic set-rewritten rules over the fact graph
 
 rule_store, rule_graph, network = SetupRuleStore(makeNetwork=True)
-network.nsMap = {u'ex': exNs}
+network.nsMap = {'ex': exNs}
 closureDeltaGraph = Graph()
 network.inferredFacts = closureDeltaGraph
 

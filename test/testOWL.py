@@ -3,7 +3,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 from glob import glob
 import os
 import time
@@ -61,18 +61,18 @@ queryNsMapping = {
     'rdfs': str(RDFS)}
 
 nsMap = {
-    u'rdfs': RDFS,
-    u'rdf': RDF,
-    u'rete': RETE_NS,
-    u'owl': OWL_NS,
-    u'': TEST_NS,
-    u'otest': OWL_TEST,
-    u'rtest': RDF_TEST,
-    u'foaf': URIRef("http://xmlns.com/foaf/0.1/"),
-    u'math': URIRef("http://www.w3.org/2000/10/swap/math#"),
+    'rdfs': RDFS,
+    'rdf': RDF,
+    'rete': RETE_NS,
+    'owl': OWL_NS,
+    '': TEST_NS,
+    'otest': OWL_TEST,
+    'rtest': RDF_TEST,
+    'foaf': URIRef("http://xmlns.com/foaf/0.1/"),
+    'math': URIRef("http://www.w3.org/2000/10/swap/math#"),
 }
 
-MANIFEST_QUERY = u"""\
+MANIFEST_QUERY = """\
 SELECT ?status ?premise ?conclusion ?feature ?descr
 WHERE {
   [

@@ -16,12 +16,12 @@ from FuXi.Horn.HornRules import Rule, Clause
 class testSeralizationOfEvalTests(unittest.TestCase):
 
     def testSerializingEvalPred(self):
-        nsBindings = {u'bfp': BFP_NS, u'rule': BFP_RULE}
+        nsBindings = {'bfp': BFP_NS, 'rule': BFP_RULE}
         evaluateTerm = Uniterm(
             BFP_NS.evaluate,
             [BFP_RULE[str(1)], Literal(1)],
             newNss=nsBindings)
-        self.failUnless(repr(evaluateTerm), "bfp:evaluate(rule:1 1)")
+        self.assertTrue(repr(evaluateTerm), "bfp:evaluate(rule:1 1)")
         xVar = Variable('X')
         yVar = Variable('Y')
         bodyTerm = Uniterm(RDF.rest, [xVar, yVar], newNss=nsBindings)

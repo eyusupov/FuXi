@@ -18,19 +18,19 @@ statistics, e.g.,
 '''
 import doctest
 import unittest
-import additionalDLPTests
+from . import additionalDLPTests
 import imp
 # import FuXi
 import os
 import rdflib
 import sys
-import test_builtin_ordering
-import test_network_reset
-import test_superproperty_entailment
-import testExistentialInHead
-import testOWL
-import testReteAction
-import testSkolemization
+from . import test_builtin_ordering
+from . import test_network_reset
+from . import test_superproperty_entailment
+from . import testExistentialInHead
+from . import testOWL
+from . import testReteAction
+from . import testSkolemization
 import traceback
 import types
 from unittest import TestResult

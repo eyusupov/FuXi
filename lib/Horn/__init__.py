@@ -125,7 +125,7 @@ class ComplementExpansionTestSuite(unittest.TestCase):
         female += girl
 
         testClass = human & ~ female
-        self.assertEquals(repr(testClass), 'ex:Human THAT ( NOT ex:Female )')
+        self.assertEqual(repr(testClass), 'ex:Human THAT ( NOT ex:Female )')
         newtestClass = ComplementExpansion(testClass, debug=True)
         self.assertTrue(repr(newtestClass) in [
             '( ex:Boy or ex:Man )',
@@ -133,7 +133,7 @@ class ComplementExpansionTestSuite(unittest.TestCase):
             repr(newtestClass))
 
         testClass2 = animal & ~ (male | female)
-        self.assertEquals(repr(testClass2),
+        self.assertEqual(repr(testClass2),
                           '( ( ex:Cat or ex:Dog or ex:Human ) and ( not ( ex:Male or ex:Female ) ) )')
         newtestClass2 = ComplementExpansion(testClass2, debug=True)
         testClass2Repr = repr(newtestClass2)

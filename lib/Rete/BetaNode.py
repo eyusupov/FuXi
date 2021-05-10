@@ -79,7 +79,7 @@ def collectVariables(node):
 
 # From itertools recipes
 def iteritems(mapping):
-    return list(zip(iter(mapping.keys()), iter(mapping.values())))
+    return list(zip(iter(list(mapping.keys())), iter(list(mapping.values()))))
 
 
 def any(seq, pred=None):
@@ -324,7 +324,7 @@ class PartialInstantiation(object):
         unmappedJoinVars = set(newJoinDict)
         # newJoinDict.update(dict([(v,None) for v in newJoinVariables]))
         for binding in self.bindings:
-            for key, val in newJoinDict.items():
+            for key, val in list(newJoinDict.items()):
                 boundVal = binding.get(key)
                 if boundVal is not None:
                     unmappedJoinVars.discard(key)
@@ -918,7 +918,7 @@ class PartialInstantiationTests(unittest.TestCase):
         # print(pToken.joinedBindings)
         for binding in pToken.bindings:
             for key in self.unJoinedBindings:
-                self.failUnless(
+                self.assertTrue(
                     key in binding, "Missing key %s from %s" % (key, binding))
 
     def setUp(self):

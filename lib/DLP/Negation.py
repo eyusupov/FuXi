@@ -288,11 +288,11 @@ class UniversalRestrictionTest(unittest.TestCase):
         ruleStore, ruleGraph, network = SetupRuleStore(makeNetwork=True)
         posRules, ignored = CalculateStratifiedModel(
             network, self.ontGraph, [EX_NS.Bar])
-        self.failUnless(
+        self.assertTrue(
             not posRules, "There should be no rules in the 0 strata.")
         self.assertEqual(len(ignored), 2, "There should be 2 'negative' rules")
         testClass1.graph = network.inferredFacts
-        self.failUnless(individual1 in testClass1.extent,
+        self.assertTrue(individual1 in testClass1.extent,
                         "%s should be in ex:Bar's extent" % individual1)
 
     def testNominalPartition(self):
@@ -318,7 +318,7 @@ class UniversalRestrictionTest(unittest.TestCase):
         (EX.Bar).extent = [ex]
         self.ontGraph.add((ex, EX_NS.propFoo, EX_NS.individual1))
         CalculateStratifiedModel(network, self.ontGraph, [EX_NS.Foo])
-        self.failUnless((ex, RDF.type, EX_NS.Foo) in network.inferredFacts,
+        self.assertTrue((ex, RDF.type, EX_NS.Foo) in network.inferredFacts,
                         "Missing level 1 predicate (ex:Foo)")
 
 
@@ -347,7 +347,7 @@ class NegatedExistentialRestrictionTest(unittest.TestCase):
         CalculateStratifiedModel(
             network, testCase2.graph, [EX_NS.Foo, EX_NS.IsolatedCABGOperation])
         testCase2.graph = network.inferredFacts
-        self.failUnless(op in testCase2.extent,
+        self.assertTrue(op in testCase2.extent,
                         "%s should be in ex:IsolatedCABGOperation's extent" % op)
 
     def testGeneralConceptInclusion(self):
@@ -366,15 +366,15 @@ class NegatedExistentialRestrictionTest(unittest.TestCase):
         ruleStore, ruleGraph, network = SetupRuleStore(makeNetwork=True)
         posRules, negRules = CalculateStratifiedModel(
             network, self.ontGraph, [EX_NS.NoExclusion])
-        self.failUnless(
+        self.assertTrue(
             not posRules, "There should be no rules in the 0 strata.")
         self.assertEqual(
             len(negRules), 2, "There should be 2 'negative' rules")
         Individual.factoryGraph = network.inferredFacts
         targetClass = Class(EX_NS.NoExclusion, skipOWLClassMembership=False)
-        self.failUnless(individual1 in targetClass.extent,
+        self.assertTrue(individual1 in targetClass.extent,
                         "There is a BNode that bears the contains relation with another individual that is not a member of Exclusion.")
-        self.assertEquals(len(list(targetClass.extent)), 1,
+        self.assertEqual(len(list(targetClass.extent)), 1,
                           "There should only be one member in NoExclusion")
 
 
@@ -402,13 +402,13 @@ class NegatedDisjunctTest(unittest.TestCase):
         posRules, negRules = CalculateStratifiedModel(
             network, self.ontGraph, [EX_NS.Foo])
         foo.graph = network.inferredFacts
-        self.failUnless(
+        self.assertTrue(
             not posRules, "There should be no rules in the 0 strata.")
         self.assertEqual(repr(negRules[
                          0]), "Forall ?X ( ex:Foo(?X) :- And( ex:Omega(?X) not ex:Bar(?X) not ex:Baz(?X) ) )")
-        self.failUnless(
+        self.assertTrue(
             len(negRules) == 1, "There should only be one negative rule in a higher strata")
-        self.failUnless(individual in foo.extent,
+        self.assertTrue(individual in foo.extent,
                         "%s should be a member of ex:Foo" % individual)
 
 
@@ -434,16 +434,16 @@ class NegationOfAtomicConcept(unittest.TestCase):
                          "Class: ex:Baz DisjointWith ex:Bar\n")
         posRules, negRules = CalculateStratifiedModel(
             network, self.ontGraph, [EX_NS.Foo])
-        self.failUnless(
+        self.assertTrue(
             not posRules, "There should be no rules in the 0 strata.")
-        self.failUnless(
+        self.assertTrue(
             len(negRules) == 1, "There should only be one negative rule in a higher strata")
         self.assertEqual(repr(negRules[0]),
                          "Forall ?X ( ex:Baz(?X) :- not ex:Bar(?X) )")
         baz.graph = network.inferredFacts
-        self.failUnless(individual in baz.extent,
+        self.assertTrue(individual in baz.extent,
                         "%s should be a member of ex:Baz" % individual)
-        self.failUnless(individual2 not in baz.extent,
+        self.assertTrue(individual2 not in baz.extent,
                         "%s should *not* be a member of ex:Baz" % individual2)
 
 if __name__ == '__main__':

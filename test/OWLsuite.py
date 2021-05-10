@@ -26,7 +26,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 from glob import glob
 import logging
 import warnings
@@ -65,18 +65,18 @@ queryNsMapping = {
 }
 
 nsMap = {
-    u'rdfs': RDFS,
-    u'rdf': RDF,
-    u'rete': RETE_NS,
-    u'owl': OWL_NS,
-    u'': TEST_NS,
-    u'otest': OWL_TEST,
-    u'rtest': RDF_TEST,
-    u'foaf': URIRef("http://xmlns.com/foaf/0.1/"),
-    u'math': URIRef("http://www.w3.org/2000/10/swap/math#"),
+    'rdfs': RDFS,
+    'rdf': RDF,
+    'rete': RETE_NS,
+    'owl': OWL_NS,
+    '': TEST_NS,
+    'otest': OWL_TEST,
+    'rtest': RDF_TEST,
+    'foaf': URIRef("http://xmlns.com/foaf/0.1/"),
+    'math': URIRef("http://www.w3.org/2000/10/swap/math#"),
 }
 
-MANIFEST_QUERY = u"""\
+MANIFEST_QUERY = """\
 SELECT ?status ?premise ?conclusion ?feature ?descr
 WHERE {
   [
@@ -209,7 +209,7 @@ class OwlTestSuite(unittest.TestCase):
         if not GROUND_QUERY and REASONING_STRATEGY != 'gms':
             goalDict = dict([((Variable('SUBJECT'), goalP, goalO), goalS)
                              for goalS, goalP, goalO in goals])
-            goals = goalDict.keys()
+            goals = list(goalDict.keys())
         assert goals
 
         if REASONING_STRATEGY == 'gms':
@@ -237,7 +237,7 @@ class OwlTestSuite(unittest.TestCase):
                 decisionProcedure=reasoningAlg,
                 identifyHybridPredicates=REASONING_STRATEGY == 'bfp')
             targetGraph = Graph(topDownStore)
-            for pref, nsUri in nsMap.items():
+            for pref, nsUri in list(nsMap.items()):
                 targetGraph.bind(pref, nsUri)
             start = time.time()
 
@@ -249,7 +249,7 @@ class OwlTestSuite(unittest.TestCase):
                 log.debug("Goal to solve ", query)
                 rt = targetGraph.query(query, initNs=nsMap)
                 if GROUND_QUERY:
-                    self.failUnless(rt.askAnswer[0], "Failed top-down problem")
+                    self.assertTrue(rt.askAnswer[0], "Failed top-down problem")
                 else:
                     if (goalDict[goal]) not in rt or DEBUG:
                         for network, _goal in topDownStore.queryNetworks:
@@ -257,7 +257,7 @@ class OwlTestSuite(unittest.TestCase):
                             network.reportConflictSet(True)
                         for query in topDownStore.edbQueries:
                             log.debug(query.asSPARQL())
-                    self.failUnless((goalDict[goal]) in rt,
+                    self.assertTrue((goalDict[goal]) in rt,
                                     "Failed top-down problem")
             sTime = time.time() - start
             if sTime > 1:

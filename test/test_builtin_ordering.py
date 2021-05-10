@@ -7,7 +7,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 from rdflib.graph import (
     # Graph,
@@ -84,7 +84,7 @@ def build_network2(rules):
 
 class LiteralStringStartsWith(unittest.TestCase):
     fact = (TEST_NS.test, TEST_NS.passes, Literal(1))
-    rules = u"""\
+    rules = """\
 @prefix test: <http://example.org/test#> .
 @prefix str: <http://www.w3.org/2000/10/swap/string#> .
 
@@ -97,15 +97,15 @@ test:example test:value "example" .
         self.network2 = build_network2(self.rules)
 
     def test_literal_variable_startswith_literal_should_match(self):
-        self.failUnless(self.fact in self.network.inferredFacts)
+        self.assertTrue(self.fact in self.network.inferredFacts)
 
     def test_literal_variable_startswith_literal_should_match2(self):
-        self.failUnless(self.fact in self.network2.inferredFacts)
+        self.assertTrue(self.fact in self.network2.inferredFacts)
 
 
 class URIRefStringStartsWith(unittest.TestCase):
     fact = (TEST_NS.test, TEST_NS.passes, Literal(1))
-    rules = u"""\
+    rules = """\
 @prefix test: <http://example.org/test#> .
 @prefix str: <http://www.w3.org/2000/10/swap/string#> .
 
@@ -119,10 +119,10 @@ test:example test:value test:example .
         self.network2 = build_network2(self.rules)
 
     def test_uriref_variable_startswith_literal_should_match(self):
-        self.failUnless(self.fact in self.network.inferredFacts)
+        self.assertTrue(self.fact in self.network.inferredFacts)
 
     def test_uriref_variable_startswith_literal_should_match2(self):
-        self.failUnless(self.fact in self.network2.inferredFacts)
+        self.assertTrue(self.fact in self.network2.inferredFacts)
 
 if __name__ == '__main__':
     unittest.main()

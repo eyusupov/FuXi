@@ -41,7 +41,7 @@ SELECT ?RESTRICTION ?INTERMEDIATE_CLASS ?NOMINAL ?PROP
         Individual.factoryGraph = graph
         for restriction, intermediateCl, nominal, prop in graph.query(
                 self.NOMINAL_QUERY,
-                initNs={u'owl': OWL_NS}):
+                initNs={'owl': OWL_NS}):
             nominalCollection = Collection(graph, nominal)
             # purge restriction
             restr = Class(restriction)
@@ -77,7 +77,7 @@ SELECT ?RESTRICTION ?INTERMEDIATE_CLASS ?NOMINAL ?PROP ?PARTITION
         Individual.factoryGraph = graph
         for restriction, intermediateCl, nominal, prop, partition in graph.query(
                 self.NOMINAL_QUERY,
-                initNs={u'owl': OWL_NS, u'rdfs': str(RDFS)}):
+                initNs={'owl': OWL_NS, 'rdfs': str(RDFS)}):
             exceptions = EnumeratedClass()
             partition = Collection(graph, partition)
             nominalCollection = Collection(graph, nominal)
@@ -125,7 +125,7 @@ SELECT ?COMPL1 ?COMPL2 ?COMPL3
         Individual.factoryGraph = graph
         for compl1, compl2, compl3 in graph.query(
                 self.UNIVERSAL_QUERY,
-                initNs={u'owl': OWL_NS, u'rdfs': RDFS}):
+                initNs={'owl': OWL_NS, 'rdfs': RDFS}):
             Individual(compl1).replace(compl3)
             Individual(compl2).delete()
 
@@ -229,22 +229,22 @@ class ReductionTestA(unittest.TestCase):
 
     def testUnivInversion(self):
         UniversalNominalRangeTransformer().transform(self.ontGraph)
-        self.failUnlessEqual(len(list(self.foo.subClassOf)),
+        self.assertEqual(len(list(self.foo.subClassOf)),
                              1,
                              "There should still be one subsumed restriction")
         subC = CastClass(first(self.foo.subClassOf))
-        self.failUnless(not isinstance(subC, Restriction),
+        self.assertTrue(not isinstance(subC, Restriction),
                         "subclass of a restriction")
-        self.failUnless(subC.complementOf is not None, "Should be a complement.")
+        self.assertTrue(subC.complementOf is not None, "Should be a complement.")
         innerC = CastClass(subC.complementOf)
-        self.failUnless(isinstance(innerC, Restriction),
+        self.assertTrue(isinstance(innerC, Restriction),
                         "complement of a restriction, not %r" % innerC)
-        self.failUnlessEqual(innerC.onProperty,
+        self.assertEqual(innerC.onProperty,
                              EX_NS.propFoo,
                              "restriction on propFoo")
-        self.failUnless(innerC.someValuesFrom, "converted to an existential restriction not %r" % innerC)
+        self.assertTrue(innerC.someValuesFrom, "converted to an existential restriction not %r" % innerC)
         invertedC = CastClass(innerC.someValuesFrom)
-        self.failUnless(isinstance(invertedC, EnumeratedClass),
+        self.assertTrue(isinstance(invertedC, EnumeratedClass),
                         "existential restriction on enumerated class")
         self.assertEqual(len(invertedC),
                          2,
@@ -272,10 +272,10 @@ class ReductionTestB(unittest.TestCase):
 
     def testHiddenDemorgan(self):
         NormalFormReduction(self.ontGraph)
-        self.failUnless(first(self.foo.subClassOf).complementOf,
+        self.assertTrue(first(self.foo.subClassOf).complementOf,
                         "should be the negation of a boolean class")
         innerC = CastClass(first(self.foo.subClassOf).complementOf)
-        self.failUnless(isinstance(innerC, BooleanClass) and
+        self.assertTrue(isinstance(innerC, BooleanClass) and
                         innerC._operator == OWL_NS.intersectionOf,
                         "should be the negation of a conjunct")
         self.assertEqual(repr(innerC), "( ex:alpha and ex:omega )")
@@ -291,10 +291,10 @@ class FlatteningTest(unittest.TestCase):
         self.topLevelConjunct = EX.alpha & nestedConjunct
 
     def testFlattening(self):
-        self.assertEquals(repr(self.topLevelConjunct),
+        self.assertEqual(repr(self.topLevelConjunct),
                           'ex:alpha THAT ( ex:omega AND ex:gamma )')
         ConjunctionFlattener().transform(self.ontGraph)
-        self.assertEquals(repr(self.topLevelConjunct),
+        self.assertEqual(repr(self.topLevelConjunct),
                           '( ex:alpha AND ex:omega AND ex:gamma )')
 
 
@@ -308,10 +308,10 @@ class UniversalComplementXFormTest(unittest.TestCase):
     def testUniversalInversion(self):
         testClass1 = EX.omega & (Property(EX_NS.someProp) | only | ~EX.gamma)
         testClass1.identifier = EX_NS.Foo
-        self.assertEquals(repr(testClass1),
+        self.assertEqual(repr(testClass1),
                           'ex:omega THAT ( ex:someProp ONLY ( NOT ex:gamma ) )')
         NormalFormReduction(self.ontGraph)
-        self.assertEquals(repr(testClass1),
+        self.assertEqual(repr(testClass1),
                           'ex:omega THAT ( NOT ( ex:someProp SOME ex:gamma ) )')
 
 if __name__ == '__main__':

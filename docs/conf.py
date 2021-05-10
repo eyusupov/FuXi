@@ -40,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'FuXi'
-copyright = u'2012, Chimezie Ogbuji'
+project = 'FuXi'
+copyright = '2012, Chimezie Ogbuji'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -183,8 +183,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'FuXi.tex', u'FuXi Documentation',
-   u'Chimezie Ogbuji', 'manual'),
+  ('index', 'FuXi.tex', 'FuXi Documentation',
+   'Chimezie Ogbuji', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -213,8 +213,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'fuxi', u'FuXi Documentation',
-     [u'Chimezie Ogbuji'], 1)
+    ('index', 'fuxi', 'FuXi Documentation',
+     ['Chimezie Ogbuji'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'FuXi', u'FuXi Documentation',
-   u'Chimezie Ogbuji', 'FuXi', 'One line description of project.',
+  ('index', 'FuXi', 'FuXi Documentation',
+   'Chimezie Ogbuji', 'FuXi', 'One line description of project.',
    'Miscellaneous'),
 ]
 

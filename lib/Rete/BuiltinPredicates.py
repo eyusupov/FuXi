@@ -6,7 +6,7 @@ import unittest
 try:
     from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 from rdflib.graph import Graph
 from rdflib.util import first
@@ -94,7 +94,7 @@ def MathEqualTo(subject, object_):
         if not isinstance(term, Variable):
             assert isinstance(term, Literal), \
                 "math:equalTo can only be used with Literals (%s)" % term
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:equalTo can only be used " + \
                 "with Numeric Literals (%s)" % term
 
@@ -102,7 +102,7 @@ def MathEqualTo(subject, object_):
         for term in [s, o]:
             assert isinstance(term, Literal), \
                 "math:equalTo can only be used with Literals (%s)" % term
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:equalTo can only be used with " + \
                 "Numeric Literals (%s)" % term
         return s.toPython() == o.toPython()
@@ -114,7 +114,7 @@ def MathGreaterThan(subject, object_):
         if not isinstance(term, Variable):
             assert isinstance(term, Literal), \
                 "math:lessThan can only be used with Literals (%s)" % term
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:lessThan can only be used with " + \
                 "Numeric Literals (%s)" % term
 
@@ -122,7 +122,7 @@ def MathGreaterThan(subject, object_):
         for term in [s, o]:
             assert isinstance(term, Literal), \
                 "math:greaterThan can only be used with Literals (%s)" % term
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:greaterThan can only be used " + \
                 "with Numeric Literals (%s)" % term
         return s.toPython() > o.toPython()
@@ -134,7 +134,7 @@ def MathLessThan(subject, object_):
         if not isinstance(term, Variable):
             assert isinstance(term, Literal), \
                 "math:lessThan can only be used with Literals (%s)" % term
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:lessThan can only be used with " + \
                 "Numeric Literals. (%s)" % term
 
@@ -142,7 +142,7 @@ def MathLessThan(subject, object_):
         for term in [s, o]:
             assert isinstance(term, Literal), \
                 "math:lessThan can only be used with Literals (%s)" % term
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:lessThan can only be used with " + \
                 "Numeric Literals (%s)" % term
         return s.toPython() < o.toPython()
@@ -154,7 +154,7 @@ def MathNotLessThan(subject, object_):
         if not isinstance(term, Variable):
             assert isinstance(term, Literal), \
                 "math:notLessThan can only be used with Literals (%s)" % term
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:lessThan can only be used with " + \
                 "Numeric Literals (%s)" % term
 
@@ -162,7 +162,7 @@ def MathNotLessThan(subject, object_):
         for term in [s, o]:
             assert isinstance(term, Literal), \
                 "math:notLessThan can only be used with Literals"
-            assert isinstance(term.toPython(), (int, long, float)), \
+            assert isinstance(term.toPython(), (int, float)), \
                 "math:lessThan can only be used with " + \
                 "Numeric Literals (%s)" % term
         return not(s.toPython() < o.toPython())
@@ -230,17 +230,17 @@ class NonEqualityPredicatesTestSuite(unittest.TestCase):
     def testParseBuiltIns(self):
         # from FuXi.Rete.RuleStore import N3Builtin
         from FuXi.Rete.AlphaNode import BuiltInAlphaNode
-        self.failUnless(self.ruleStore.rules > 0,
+        self.assertTrue(self.ruleStore.rules > 0,
                         "No rules parsed out from N3.")
         for alphaNode in self.network.alphaNodes:
             if isinstance(alphaNode, BuiltInAlphaNode):
-                self.failUnless(alphaNode.n3builtin.uri == MATH_NS.greaterThan,
+                self.assertTrue(alphaNode.n3builtin.uri == MATH_NS.greaterThan,
                                 "Unable to find math:greaterThan func")
 
     def testEvaluateBuiltIns(self):
         # from FuXi.Rete.RuleStore import N3Builtin
         # from FuXi.Rete.AlphaNode import BuiltInAlphaNode
-        self.failUnless(first(
+        self.assertTrue(first(
             self.closureDeltaGraph.triples(
                 (None, URIRef('http://test/pred1'), Literal(3)))),
             "Missing inferred :pred1 assertions")

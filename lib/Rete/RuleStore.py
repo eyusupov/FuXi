@@ -282,7 +282,7 @@ BuiltIn used out of order
         self.rules = []
         self.referencedVariables = set()
         self.nsMgr = {
-            u'skolem': URIRef('http://code.google.com/p/python-dlp/wiki/SkolemTerm#')}
+            'skolem': URIRef('http://code.google.com/p/python-dlp/wiki/SkolemTerm#')}
         self.filters = {}
         self.filters.update(FILTERS)
         if additionalBuiltins:

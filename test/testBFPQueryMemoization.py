@@ -5,7 +5,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 from rdflib.graph import Graph
 from rdflib import (
     RDF,
@@ -24,7 +24,7 @@ from FuXi.SPARQL.BackwardChainingStore import (
 from FuXi.Syntax.InfixOWL import OWL_NS
 
 
-EX_ONT = u"""\
+EX_ONT = """\
 @prefix first: <http://www.w3.org/2002/03owlt/intersectionOf/premises001#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -40,8 +40,8 @@ EX_ONT = u"""\
 EX = Namespace('http://www.w3.org/2002/03owlt/intersectionOf/premises001#')
 
 nsMap = {
-    u'owl': OWL_NS,
-    u'first': URIRef('http://www.w3.org/2002/03owlt/intersectionOf/premises001#'),
+    'owl': OWL_NS,
+    'first': URIRef('http://www.w3.org/2002/03owlt/intersectionOf/premises001#'),
 }
 
 
@@ -97,7 +97,7 @@ class QueryMemoizationTest(unittest.TestCase):
             decisionProcedure=BFP_METHOD,
             identifyHybridPredicates=True)
         targetGraph = Graph(topDownStore)
-        for pref, nsUri in nsMap.items():
+        for pref, nsUri in list(nsMap.items()):
             targetGraph.bind(pref, nsUri)
         goal = (Variable('SUBJECT'), RDF.type, EX.C)
         queryLiteral = EDBQuery([BuildUnitermFromTuple(goal)],
@@ -110,7 +110,7 @@ class QueryMemoizationTest(unittest.TestCase):
         print("Queries dispatched against EDB")
         for query in self.owlGraph.queriesDispatched:
             print(query)
-        self.failUnlessEqual(
+        self.assertEqual(
             len(self.owlGraph.queriesDispatched), 4, "Duplicate query")
 
 

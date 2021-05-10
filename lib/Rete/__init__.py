@@ -13,7 +13,7 @@ assert RETE_NS
 
 
 PROGRAM2 = \
-    u"""
+    """
 @prefix ex: <http://doi.acm.org/10.1145/28659.28689#>.
 { ?X ex:flat ?Y } => { ?X ex:sg ?Y }.
 { ?X ex:up ?Z1 .

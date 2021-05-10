@@ -53,7 +53,7 @@ from rdflib import (
 try:
     from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 import logging
 log = logging.getLogger(__name__)
@@ -163,7 +163,7 @@ RIGHT_SUBSUMPTION_OPERAND = 1
 BOTH_SUBSUMPTION_OPERAND = 2
 NEITHER_SUBSUMPTION_OPERAND = 3
 
-SUBSUMPTION_SEMANTICS = u"""
+SUBSUMPTION_SEMANTICS = """
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
@@ -246,10 +246,10 @@ def WhichSubsumptionOperand(term, owlGraph):
     targetGraph = Graph(topDownStore)
     appearsLeft = targetGraph.query(
         "ASK { <%s> rdfs:subClassOf [] } ",
-        initNs={u'rdfs': RDFS})
+        initNs={'rdfs': RDFS})
     appearsRight = targetGraph.query(
         "ASK { [] rdfs:subClassOf <%s> } ",
-        initNs={u'rdfs': RDFS})
+        initNs={'rdfs': RDFS})
     if appearsLeft and appearsRight:
         return BOTH_SUBSUMPTION_OPERAND
     elif appearsLeft:
@@ -493,7 +493,7 @@ def SetupMetaInterpreter(tBoxGraph, goal, useThingRule=True):
 
     lit = BuildUnitermFromTuple(goal)
     op = GetOp(lit)
-    lit.setOperator(URIRef(op + u'_derived'))
+    lit.setOperator(URIRef(op + '_derived'))
     goal = lit.toRDFTuple()
 
     sipCollection = PrepareSipCollection(reducedCompletionRules)

@@ -159,7 +159,7 @@ def renderTerm(graph, term):
                              hasattr(graph, 'revNsMap')
                              and graph.revNsMap or
                              dict([(u, p) for p, u in graph.namespaces()]))
-        return qname[0] == '_' and u"<%s>" % term or qname
+        return qname[0] == '_' and "<%s>" % term or qname
     else:
         try:
             return isinstance(term, BNode) and term.n3() or graph.qname(term)
@@ -793,8 +793,7 @@ def SipStrategy(query,
                 memoizeMemory.setdefault(queryLiteral, set()).add(
                     (prepMemiozedAns(rt), ns))
                 yield rt, ns
-            rules = filter(
-                lambda i: not IsAtomicInclusionAxiomRHS(i), rules)
+            rules = [i for i in rules if not IsAtomicInclusionAxiomRHS(i)]
         for rule in rules:
             # An exception is the special predicate ph; it is treated as a base
             # predicate and the tuples in it are those supplied for qb by

@@ -143,7 +143,7 @@ def SetupDDLAndAdornProgram(factGraph,
         # using information from the adorned queries to determine appropriate arity
         # and adornment
         hybridPred = URIRef(hybridPred)
-        hPred = URIRef(hybridPred + u'_derived')
+        hPred = URIRef(hybridPred + '_derived')
         if len(adornment) == 1:
             # p_derived^{a}(X) :- p(X)
             body = BuildUnitermFromTuple(
@@ -338,7 +338,7 @@ class AdornedRule(Rule):
 
         def recursiveLiteral(term):
             return isinstance(term, AdornedUniTerm) and termHash(term) == headHash
-        if first(filter(recursiveLiteral, iterCondition(self.formula.body))):
+        if first(list(filter(recursiveLiteral, iterCondition(self.formula.body)))):
             return True
         else:
             return False
@@ -409,12 +409,12 @@ def AdornRule(derivedPreds,
     if hybridPreds2Replace:
         atomPred = GetOp(adornedHead)
         if atomPred in hybridPreds2Replace:
-            adornedHead.setOperator(URIRef(atomPred + u'_derived'))
+            adornedHead.setOperator(URIRef(atomPred + '_derived'))
         for bodAtom in [bodyPredReplace.get(p, p)
                         for p in iterCondition(sip.sipOrder)]:
             bodyPred = GetOp(bodAtom)
             if bodyPred in hybridPreds2Replace:
-                bodAtom.setOperator(URIRef(bodyPred + u'_derived'))
+                bodAtom.setOperator(URIRef(bodyPred + '_derived'))
     rule = AdornedRule(Clause(And([bodyPredReplace.get(p, p)
                                    for p in iterCondition(sip.sipOrder)]),
                               adornedHead))
@@ -852,12 +852,10 @@ def IdentifyDerivedPredicates(ddlMetaGraph, tBox, ruleset=None):
         basePropPrefixes.extend(Collection(ddlMetaGraph, basePropPrefixList))
 
     for prop in tBox.query(OWL_PROPERTIES_QUERY):
-        if first(filter(lambda prefix: prop.startswith(prefix),
-                        derivedPropPrefixes)) and \
+        if first([prefix for prefix in derivedPropPrefixes if prop.startswith(prefix)]) and \
                 (prop, RDF.type, OWL_NS.AnnotationProperty) not in tBox:
             dPreds.add(prop)
-        if first(filter(lambda prefix: prop.startswith(prefix),
-                        basePropPrefixes)) and \
+        if first([prefix for prefix in basePropPrefixes if prop.startswith(prefix)]) and \
                 (prop, RDF.type, OWL_NS.AnnotationProperty) not in tBox and \
                 prop not in dPreds:
             basePreds.add(prop)
@@ -874,12 +872,10 @@ def IdentifyDerivedPredicates(ddlMetaGraph, tBox, ruleset=None):
                                             baseClsPrefixList))
     for cls in tBox.subjects(predicate=RDF.type,
                              object=OWL_NS.Class):
-        if first(filter(lambda prefix: cls.startswith(prefix),
-                        baseClassPrefixes)):
+        if first([prefix for prefix in baseClassPrefixes if cls.startswith(prefix)]):
             if cls not in dPreds:
                 basePreds.add(cls)
-        if first(filter(lambda prefix: cls.startswith(prefix),
-                        derivedClassPrefixes)):
+        if first([prefix for prefix in derivedClassPrefixes if cls.startswith(prefix)]):
             if cls not in basePreds:
                 dPreds.add(cls)
 

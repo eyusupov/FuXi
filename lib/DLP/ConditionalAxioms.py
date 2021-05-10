@@ -80,7 +80,7 @@ def AdditionalRules(tBox):
         from io import StringIO
         assert StringIO
     except ImportError:
-        from StringIO import StringIO
+        from io import StringIO
 
     from rdflib import RDF
     from FuXi.Syntax.InfixOWL import OWL_NS
