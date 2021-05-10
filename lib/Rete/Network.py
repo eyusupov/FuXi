@@ -278,38 +278,7 @@ class ReteNetwork:
         for prefix, Uri in nsMgr.namespaces():
             self.nsMap[prefix] = Uri
 
-    def buildFilterNetworkFromClause(self, rule):
-        lhs = BNode()
-        rhs = BNode()
-        lhs_formula = self.ruleStore.formulae.setdefault(lhs, Formula(lhs))
-        rhs_formula = self.ruleStore.formulae.setdefault(rhs, Formula(lhs))
-        builtins = []
-        for term in rule.formula.body:
-            if isinstance(term, N3Builtin):
-                # We want to move builtins to the 'end' of the body
-                # so they only apply to the terminal nodes of
-                # the corresponding network
-                builtins.append(term)
-            else:
-                lhs_formula.append(term.toRDFTuple())
-        for builtin in builtins:
-            lhs_formula.append(builtin.toRDFTuple())
-        nonEmptyHead = False
-        for term in rule.formula.head:
-            nonEmptyHead = True
-            assert not hasattr(term, 'next')
-            assert isinstance(term, Uniterm)
-            rhs_formula.append(term.toRDFTuple())
-        assert nonEmptyHead, "Filters must conclude something."
-        self.ruleStore.rules.append((lhs_formula, rhs_formula))
-        tNode = self.buildNetwork(iter(lhs_formula),
-                                  iter(rhs_formula),
-                                  rule,
-                                  aFilter=True)
-        self.rules.add(rule)
-        return tNode
-
-    def buildNetworkFromClause(self, rule):
+    def buildNetworkFromClause(self, rule, aFilter=False):
         lhs = BNode()
         rhs = BNode()
         builtins = []
@@ -332,13 +301,16 @@ class ReteNetwork:
             assert isinstance(term, Uniterm)
             rhs_formula.append(term.toRDFTuple())
         if emptyHead:
-            import warnings
-            warnings.warn(
-                "Integrity constraints (rules with empty heads) are not supported: %s" % rule,
-                SyntaxWarning, 2)
-            return
+            if filters:
+                assert nonEmptyHead, "Filters must conclude something."
+            else:
+                import warnings
+                warnings.warn(
+                    "Integrity constraints (rules with empty heads) are not supported: %s" % rule,
+                    SyntaxWarning, 2)
+                return
         self.ruleStore.rules.append((lhs_formula, rhs_formula))
-        tNode = self.buildNetwork(iter(lhs_formula), iter(rhs_formula), rule)
+        tNode = self.buildNetwork(iter(lhs_formula), iter(rhs_formula), rule, aFilter)
         self.rules.add(rule)
         return tNode
 
@@ -420,10 +392,7 @@ class ReteNetwork:
 
         if constructNetwork:
             for rule in additionalRules:
-                self.buildNetwork(iter(rule.formula.body),
-                                  iter(rule.formula.head),
-                                  rule)
-                self.rules.add(rule)
+                self.buildNetworkFromClause(rule)
         else:
             rules.update(additionalRules)
 
@@ -466,10 +435,7 @@ class ReteNetwork:
         from FuXi.Horn.HornRules import Ruleset
         for rule in Ruleset(n3Rules=store.rules,
                             nsMapping=self.nsMap):
-            self.buildNetwork(iter(rule.formula.body),
-                              iter(rule.formula.head),
-                              rule)
-            self.rules.add(rule)
+            self.buildNetworkFromClause(rule)
 
     def __repr__(self):
         total = 0

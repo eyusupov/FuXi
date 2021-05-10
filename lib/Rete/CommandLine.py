@@ -637,7 +637,7 @@ def main():
 
     for fileN in options.filter:
         for rule in HornFromN3(fileN):
-            network.buildFilterNetworkFromClause(rule)
+            network.buildNetworkFromClause(rule, aFitler=True)
 
     if options.negation and network.negRules and options.method in ['both',
                                                                     'bottomUp']:
