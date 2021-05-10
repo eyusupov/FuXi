@@ -1,10 +1,10 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 import unittest
-from FuXi.Syntax.InfixOWL import BooleanClass
-from FuXi.Syntax.InfixOWL import Class
-from FuXi.Syntax.InfixOWL import Individual
-from FuXi.Syntax.InfixOWL import OWL_NS
+from rdflib.extras.infixowl import BooleanClass
+from rdflib.extras.infixowl import Class
+from rdflib.extras.infixowl import Individual
+from rdflib.extras.infixowl import OWL_NS
 from FuXi.Rete.Network import ReteNetwork
 from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.DLP import SKOLEMIZED_CLASS_NS

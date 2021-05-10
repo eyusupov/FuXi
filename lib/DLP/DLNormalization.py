@@ -9,18 +9,18 @@ from rdflib.collection import Collection
 from rdflib.util import first
 import unittest
 
-from FuXi.Syntax.InfixOWL import BooleanClass
-from FuXi.Syntax.InfixOWL import CastClass
-from FuXi.Syntax.InfixOWL import Class
-from FuXi.Syntax.InfixOWL import ClassNamespaceFactory
-from FuXi.Syntax.InfixOWL import EnumeratedClass
-from FuXi.Syntax.InfixOWL import Individual
-from FuXi.Syntax.InfixOWL import OWL_NS
-from FuXi.Syntax.InfixOWL import Property
-from FuXi.Syntax.InfixOWL import Restriction
-from FuXi.Syntax.InfixOWL import only
-from FuXi.Syntax.InfixOWL import some
-from FuXi.Syntax.InfixOWL import value
+from rdflib.extras.infixowl import BooleanClass
+from rdflib.extras.infixowl import CastClass
+from rdflib.extras.infixowl import Class
+from rdflib.extras.infixowl import ClassNamespaceFactory
+from rdflib.extras.infixowl import EnumeratedClass
+from rdflib.extras.infixowl import Individual
+from rdflib.extras.infixowl import OWL_NS
+from rdflib.extras.infixowl import Property
+from rdflib.extras.infixowl import Restriction
+from rdflib.extras.infixowl import only
+from rdflib.extras.infixowl import some
+from rdflib.extras.infixowl import value
 try:
     from functools import reduce
 except ImportError:

@@ -26,16 +26,16 @@ from FuXi.DLP import SkolemizeExistentialClasses
 from FuXi.Horn.HornRules import HornFromN3
 from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.SPARQL.BackwardChainingStore import TopDownSPARQLEntailingStore
-from FuXi.Syntax.InfixOWL import AllClasses
-from FuXi.Syntax.InfixOWL import BooleanClass
-from FuXi.Syntax.InfixOWL import CastClass
-from FuXi.Syntax.InfixOWL import Class
-from FuXi.Syntax.InfixOWL import ClassNamespaceFactory
-from FuXi.Syntax.InfixOWL import Individual
-from FuXi.Syntax.InfixOWL import OWL_NS
-from FuXi.Syntax.InfixOWL import Property
-from FuXi.Syntax.InfixOWL import Restriction
-from FuXi.Syntax.InfixOWL import some
+from rdflib.extras.infixowl import AllClasses
+from rdflib.extras.infixowl import BooleanClass
+from rdflib.extras.infixowl import CastClass
+from rdflib.extras.infixowl import Class
+from rdflib.extras.infixowl import ClassNamespaceFactory
+from rdflib.extras.infixowl import Individual
+from rdflib.extras.infixowl import OWL_NS
+from rdflib.extras.infixowl import Property
+from rdflib.extras.infixowl import Restriction
+from rdflib.extras.infixowl import some
 from rdflib import (
     Graph,
     BNode,

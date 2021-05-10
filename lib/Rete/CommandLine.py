@@ -14,12 +14,12 @@ from FuXi.Rete.Proof import PML, GMP_NS
 from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.Rete.Util import generateTokenSet
 from FuXi.SPARQL.BackwardChainingStore import TopDownSPARQLEntailingStore
-from FuXi.Syntax.InfixOWL import AllClasses
-from FuXi.Syntax.InfixOWL import AllProperties
-from FuXi.Syntax.InfixOWL import Class
-from FuXi.Syntax.InfixOWL import Individual
-from FuXi.Syntax.InfixOWL import OWL_NS
-from FuXi.Syntax.InfixOWL import Property
+from rdflib.extras.infixowl import AllClasses
+from rdflib.extras.infixowl import AllProperties
+from rdflib.extras.infixowl import Class
+from rdflib.extras.infixowl import Individual
+from rdflib.extras.infixowl import OWL_NS
+from rdflib.extras.infixowl import Property
 
 from rdflib.graph import Graph
 from rdflib.namespace import NamespaceManager

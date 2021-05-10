@@ -867,7 +867,7 @@ def Th(owlGraph, _class, variable=Variable('X'), position=LHS):
             yield And([Uniterm(prop, [variable, newVar], newNss=owlGraph.namespaces()),
                        generatorFlattener(Th(owlGraph, o, variable=newVar))])
     elif OWL_NS.intersectionOf in props:
-        from FuXi.Syntax.InfixOWL import BooleanClass
+        from rdflib.extras.infixowl import BooleanClass
         yield And([first(Th(owlGraph, h, variable)) for h in BooleanClass(_class)])
     else:
         # Simple class

@@ -43,7 +43,7 @@ from FuXi.Horn import (
     # DATALOG_SAFETY_STRICT,
     # DATALOG_SAFETY_LOOSE,
 )
-from FuXi.Syntax.InfixOWL import Class
+from rdflib.extras.infixowl import Class
 from FuXi.Horn.PositiveConditions import (
     Exists,
     GetUterm,

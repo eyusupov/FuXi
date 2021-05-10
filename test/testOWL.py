@@ -17,7 +17,7 @@ from FuXi.DLP.ConditionalAxioms import AdditionalRules
 from FuXi.Horn.HornRules import HornFromN3
 from FuXi.Horn.PositiveConditions import BuildUnitermFromTuple
 from FuXi.Rete.Magic import AdornLiteral, MagicSetTransformation
-from FuXi.Syntax.InfixOWL import(
+from rdflib.extras.infixowl import(
     nsBinds,
     AllClasses,
     Individual,

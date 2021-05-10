@@ -17,7 +17,7 @@ from FuXi.Rete.Magic import AdornLiteral, MagicSetTransformation
 from FuXi.Rete.Util import generateTokenSet
 from FuXi.SPARQL import EDBQuery
 from FuXi.SPARQL.BackwardChainingStore import TopDownSPARQLEntailingStore
-from FuXi.Syntax.InfixOWL import nsBinds, AllClasses, Individual
+from rdflib.extras.infixowl import nsBinds, AllClasses, Individual
 from rdflib import BNode, Namespace, RDF, RDFS, URIRef, plugin
 from rdflib.graph import Graph
 from rdfextras.sparql.parser import parse

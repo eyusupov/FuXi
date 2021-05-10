@@ -17,7 +17,7 @@ try:
     from itertools import filterfalse
 except ImportError:
     from itertools import filterfalse as filterfalse
-# from FuXi.Syntax.InfixOWL import *
+# from rdflib.extras.infixowl import *
 from FuXi.Horn.PositiveConditions import (
     buildUniTerm,
     Exists,

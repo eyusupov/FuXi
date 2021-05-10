@@ -13,7 +13,7 @@ from rdflib import (
     Variable,
 )
 from FuXi.Rete.RuleStore import SetupRuleStore
-from FuXi.Syntax.InfixOWL import OWL_NS
+from rdflib.extras.infixowl import OWL_NS
 from FuXi.Horn.HornRules import HornFromN3
 from FuXi.SPARQL.BackwardChainingStore import TopDownSPARQLEntailingStore
 

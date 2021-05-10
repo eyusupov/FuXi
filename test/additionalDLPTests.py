@@ -3,7 +3,7 @@ from rdflib.graph import Graph
 from rdflib import Namespace
 from rdflib.util import first
 from FuXi.Rete.RuleStore import SetupRuleStore
-from FuXi.Syntax.InfixOWL import (
+from rdflib.extras.infixowl import (
     OWL_NS,
     Class,
     ClassNamespaceFactory,

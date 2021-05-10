@@ -57,7 +57,7 @@ from FuXi.Rete.SidewaysInformationPassing import IncomingSIPArcs
 from FuXi.Rete.SidewaysInformationPassing import iterCondition
 from FuXi.Rete.SidewaysInformationPassing import SetOp
 from FuXi.Rete.SidewaysInformationPassing import SIPRepresentation
-from FuXi.Syntax.InfixOWL import OWL_NS
+from rdflib.extras.infixowl import OWL_NS
 
 from rdflib import (
     Graph,

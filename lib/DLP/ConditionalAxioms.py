@@ -83,7 +83,7 @@ def AdditionalRules(tBox):
         from io import StringIO
 
     from rdflib import RDF
-    from FuXi.Syntax.InfixOWL import OWL_NS
+    from rdflib.extras.infixowl import OWL_NS
 
     ruleSrc = set()
     addListSemantics = False

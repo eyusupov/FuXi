@@ -2,12 +2,12 @@
 import sys
 import unittest
 
-from FuXi.Syntax.InfixOWL import BooleanClass
-from FuXi.Syntax.InfixOWL import Class
-from FuXi.Syntax.InfixOWL import Individual
-from FuXi.Syntax.InfixOWL import CastClass
-from FuXi.Syntax.InfixOWL import classOrIdentifier
-from FuXi.Syntax.InfixOWL import OWL_NS
+from rdflib.extras.infixowl import BooleanClass
+from rdflib.extras.infixowl import Class
+from rdflib.extras.infixowl import Individual
+from rdflib.extras.infixowl import CastClass
+from rdflib.extras.infixowl import classOrIdentifier
+from rdflib.extras.infixowl import OWL_NS
 from rdflib.graph import Graph
 from rdflib.namespace import NamespaceManager
 from rdflib import RDF, Namespace

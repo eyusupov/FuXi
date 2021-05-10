@@ -68,7 +68,6 @@ config = dict(
         "FuXi.Rete",
         "FuXi.DLP",
         "FuXi.Horn",
-        "FuXi.Syntax",
     ],
     install_requires=['rdflib>2'],
     license="Apache",

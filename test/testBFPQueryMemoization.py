@@ -21,7 +21,7 @@ from FuXi.SPARQL.BackwardChainingStore import (
     TopDownSPARQLEntailingStore,
     BFP_METHOD,
 )
-from FuXi.Syntax.InfixOWL import OWL_NS
+from rdflib.extras.infixowl import OWL_NS
 
 
 EX_ONT = """\
