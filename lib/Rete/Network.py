@@ -163,6 +163,7 @@ class HashablePatternList(object):
     def __eq__(self, other):
         return hash(self) == hash(other)
 
+emptyHashablePatternList = HashablePatternList([None])
 
 def _mulPatternWithSubstitutions(tokens, consequent, termNode):
     """
@@ -764,7 +765,6 @@ class ReteNetwork:
         """
         matchedPatterns = HashablePatternList()
         attachedPatterns = []
-        emptyHashablePatternList = HashablePatternList([None])
         # hasBuiltin = False
         for currentPattern in lhsIterator:
             if isinstance(currentPattern, Uniterm):
@@ -875,8 +875,8 @@ class ReteNetwork:
             else:
                 assert len(self.universalTruths), "should be empty LHSs"
                 terminalNode = BetaNode(None, None, aPassThru=True)
-                self.nodes[HashablePatternList([None])] = terminalNode
-                return terminalNode  # raise Exception("Ehh. Why are we here?")
+                self.nodes[emptyHashablePatternList] = terminalNode
+                return terminalNode
         if lastBetaNodePattern:
             firstNode = self.nodes[lastBetaNodePattern]
             secondNode = self.nodes[nextPattern]
@@ -886,13 +886,13 @@ class ReteNetwork:
         else:
             firstNode = self.nodes[nextPattern]
             oldAnchor = self.nodes.get(
-                HashablePatternList([None]) + nextPattern)
+                emptyHashablePatternList + nextPattern)
             if not oldAnchor:
                 if isinstance(firstNode, AlphaNode):
                     newfirstNode = BetaNode(None, firstNode, aPassThru=True)
                     newfirstNode.connectIncomingNodes(None, firstNode)
                     self.nodes[
-                        HashablePatternList([None]) + nextPattern] = newfirstNode
+                        emptyHashablePatternList + nextPattern] = newfirstNode
                 else:
                     newfirstNode = firstNode
             else:
@@ -901,8 +901,8 @@ class ReteNetwork:
             secondPattern = next(patternIterator)
             secondNode = self.nodes[secondPattern]
             newBetaNode = BetaNode(firstNode, secondNode)
-            newBNodePattern = HashablePatternList(
-                [None]) + nextPattern + secondPattern
+            newBNodePattern = emptyHashablePatternList \
+                + nextPattern + secondPattern
             self.nodes[newBNodePattern] = newBetaNode
 
         newBetaNode.connectIncomingNodes(firstNode, secondNode)
