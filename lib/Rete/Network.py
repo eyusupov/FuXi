@@ -703,13 +703,13 @@ class ReteNetwork:
             self.alphaBuiltinNodes.append(node)
         else:
             node = AlphaNode(currentPattern, self.ruleStore.filters)
+            if not isinstance(node, BuiltInAlphaNode) and node.builtin:
+                s, p, o = currentPattern
+                node = BuiltInAlphaNode(
+                    N3Builtin(p, self.ruleStore.filters[p](s, o), s, o))
+                self.alphaBuiltinNodes.append(node)
         self.alphaPatternHash[node.alphaNetworkHash()].setdefault(
             node.alphaNetworkHash(groundTermHash=True), []).append(node)
-        if not isinstance(node, BuiltInAlphaNode) and node.builtin:
-            s, p, o = currentPattern
-            node = BuiltInAlphaNode(
-                N3Builtin(p, self.ruleStore.filters[p](s, o), s, o))
-            self.alphaBuiltinNodes.append(node)
         self.alphaNodes.append(node)
         return node
 
