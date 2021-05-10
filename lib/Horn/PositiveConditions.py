@@ -33,7 +33,6 @@ except ImportError:
 
 _XSD_NS = Namespace("http://www.w3.org/2001/XMLSchema#")
 from rdflib.util import first
-from rdflib import py3compat
 
 OWL = Namespace("http://www.w3.org/2002/07/owl#")
 
@@ -161,12 +160,11 @@ class And(QNameManager, SetOperator, Condition):
         return first(filter(lambda conj: conj.isSafeForVariable(var),
                             self.formulae)) is not None
 
-    @py3compat.format_doctest_out
     def n3(self):
         """
         >>> And([Uniterm(RDF.type,[RDFS.comment,RDF.Property]),
         ...      Uniterm(RDF.type,[OWL.Class,RDFS.Class])]).n3()
-        %(u)s'rdfs:comment a rdf:Property .\\n owl:Class a rdfs:Class'
+        us'rdfs:comment a rdf:Property .\\n owl:Class a rdfs:Class'
 
         """
 
@@ -408,14 +406,13 @@ class Uniterm(QNameManager, Atomic):
         self._hash = hash(reduce(lambda x, y: str(x) + str(y),
                                  len(self.arg) == 2 and self.toRDFTuple() or [self.op] + self.arg))
 
-    @py3compat.format_doctest_out
     def _get_terms(self):
         """
         Class attribute that returns all the terms of the literal as a lists
         >>> x = Variable('X')
         >>> lit = Uniterm(RDF.type,[RDFS.comment,x])
         >>> lit.terms
-        [rdflib.term.URIRef(%(u)s'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdflib.term.URIRef(%(u)s'http://www.w3.org/2000/01/rdf-schema#comment'), ?X]
+        [rdflib.term.URIRef(us'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdflib.term.URIRef(%(u)s'http://www.w3.org/2000/01/rdf-schema#comment'), ?X]
         """
         return [self.op] + self.arg
 
@@ -496,13 +493,12 @@ class Uniterm(QNameManager, Atomic):
         else:
             return self.nsMgr.qname(term)
 
-    @py3compat.format_doctest_out
     def n3(self):
         """
         Serialize as N3 (using available namespace managers)
 
         >>> Uniterm(RDF.type,[RDFS.comment,RDF.Property]).n3()
-        %(u)s'rdfs:comment a rdf:Property'
+        us'rdfs:comment a rdf:Property'
 
         """
         return ' '.join([self.renderTermAsN3(term)
@@ -529,7 +525,7 @@ class Uniterm(QNameManager, Atomic):
     def normalizeTerm(self, term):
         if isinstance(term, Literal):
             if term.datatype == _XSD_NS.integer:
-                return str(term) if py3compat.PY3 else unicode(term)
+                return str(term)
             else:
                 return term.n3()
         else:

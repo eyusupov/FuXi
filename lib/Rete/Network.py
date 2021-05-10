@@ -77,7 +77,6 @@ from rdflib import (
     # URIRef,
     Variable,
 )
-from rdflib import py3compat
 from rdflib.util import first
 
 # from .ReteVocabulary import RETE_NS
@@ -781,8 +780,7 @@ class ReteNetwork:
         LHS = []
         while True:
             try:
-                currentPattern = next(
-                    lhsIterator) if py3compat.PY3 else lhsIterator.next()
+                currentPattern = next(lhsIterator)
 
                 # The LHS isn't done yet, stow away the current pattern
                 # We need to convert the Uniterm into a triple
@@ -892,8 +890,7 @@ class ReteNetwork:
         for the rule.  This root / terminal node is returned
         """
         try:
-            nextPattern = next(
-                patternIterator) if py3compat.PY3 else patternIterator.next()
+            nextPattern = next(patternIterator)
         except StopIteration:
             assert lastBetaNodePattern
             if lastBetaNodePattern:
@@ -924,8 +921,7 @@ class ReteNetwork:
             else:
                 newfirstNode = oldAnchor
             firstNode = newfirstNode
-            secondPattern = next(
-                patternIterator) if py3compat.PY3 else patternIterator.next()
+            secondPattern = next(patternIterator)
             secondNode = self.nodes[secondPattern]
             newBetaNode = BetaNode(firstNode, secondNode)
             newBNodePattern = HashablePatternList(

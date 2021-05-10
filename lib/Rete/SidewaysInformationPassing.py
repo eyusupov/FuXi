@@ -25,7 +25,6 @@ from rdflib.collection import Collection
 from rdflib.graph import Graph
 from rdflib import BNode, Namespace, Variable, RDF, URIRef
 from rdflib.util import first
-from rdflib import py3compat
 try:
     from functools import reduce
 except ImportError:
@@ -279,7 +278,6 @@ class InvalidSIPException(Exception):
         super(InvalidSIPException, self).__init__(msg)
 
 
-@py3compat.format_doctest_out
 def BuildNaturalSIP(clause,
                     derivedPreds,
                     adornedHead,
@@ -310,8 +308,8 @@ def BuildNaturalSIP(clause,
     ( <http://doi.acm.org/10.1145/28659.28689#up> <http://doi.acm.org/10.1145/28659.28689#sg> ) ( ?Z1 )
 
     >>> sip = BuildNaturalSIP(list(rs)[-1], [MAGIC.sg], None)  #doctest: +SKIP
-    >>> list(sip.query('SELECT ?q {  ?prop a magic:SipArc . [] ?prop ?q . }', initNs={%(u)s'magic':MAGIC}))  #doctest: +SKIP
-    [rdflib.term.URIRef(%(u)s'http://doi.acm.org/10.1145/28659.28689#sg'), rdflib.term.URIRef(%(u)s'http://doi.acm.org/10.1145/28659.28689#sg')]
+    >>> list(sip.query('SELECT ?q {  ?prop a magic:SipArc . [] ?prop ?q . }', initNs={us'magic':MAGIC}))  #doctest: +SKIP
+    [rdflib.term.URIRef(us'http://doi.acm.org/10.1145/28659.28689#sg'), rdflib.term.URIRef(us'http://doi.acm.org/10.1145/28659.28689#sg')]
     """
     from FuXi.Rete.Magic import AdornedUniTerm
     occurLookup = {}
@@ -351,7 +349,7 @@ def BuildNaturalSIP(clause,
             foundSip = False
             sips = findFullSip(([clause.head], None), clause.body)
             while not foundSip:
-                sip = next(sips) if py3compat.PY3 else sips.next()
+                sip = next(sips)
                 try:
                     reduce(collectSip,
                            iterCondition(And(sip)))

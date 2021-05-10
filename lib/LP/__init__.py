@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import doctest
 from rdflib import RDF
-from rdflib import py3compat
 
 
-@py3compat.format_doctest_out
 def IdentifyHybridPredicates(graph, derivedPredicates):
     """
     Takes an RDF graph and a list of derived predicates and return
@@ -19,7 +17,7 @@ def IdentifyHybridPredicates(graph, derivedPredicates):
     >>> g.add((rdflib.BNode(),rdflib.RDF.type,EX.Class2))
     >>> rt = IdentifyHybridPredicates(g,[EX.predicate1,EX.Class1,EX.Class3])
     >>> sorted(rt)
-    [rdflib.term.URIRef(%(u)s'http://example.com/Class1'), rdflib.term.URIRef(%(u)s'http://example.com/predicate1')]
+    [rdflib.term.URIRef(us'http://example.com/Class1'), rdflib.term.URIRef(us'http://example.com/predicate1')]
     """
     derivedPredicates = \
         derivedPredicates if isinstance(derivedPredicates, set) \

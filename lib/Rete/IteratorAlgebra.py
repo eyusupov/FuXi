@@ -12,7 +12,6 @@ Author: Jim Baker, jbaker@zyasoft.com
 """
 
 import operator
-from rdflib import py3compat
 
 
 def identity(x):
@@ -110,8 +109,8 @@ def merge_join(R, S, predicate=identity, join=inner, combine=operator.concat):
 
     # in the join we need to distinguish rp from rk in the unpack, so
     # just use rk, sk
-    rk, R_matched = next(R_grouped) if py3compat.PY3 else R_grouped.next()
-    sk, S_matched = next(S_grouped) if py3compat.PY3 else S_grouped.next()
+    rk, R_matched = next(R_grouped)
+    sk, S_matched = next(S_grouped)
 
     while R_grouped and S_grouped:
         comparison = cmp(rk, sk)
@@ -121,16 +120,12 @@ def merge_join(R, S, predicate=identity, join=inner, combine=operator.concat):
             for rp, r in R_matched:
                 for sp, s in join(S_matched):
                     yield combine(r, s)
-            rk, R_matched = next(
-                R_grouped) if py3compat.PY3 else R_grouped.next()
-            sk, S_matched = next(
-                S_grouped) if py3compat.PY3 else S_grouped.next()
+            rk, R_matched = next(R_grouped)
+            sk, S_matched = next(S_grouped)
         elif comparison > 0:
-            sk, S_matched = next(
-                S_grouped) if py3compat.PY3 else S_grouped.next()
+            sk, S_matched = next(S_grouped)
         else:
-            rk, R_matched = next(
-                R_grouped) if py3compat.PY3 else R_grouped.next()
+            rk, R_matched = next(R_grouped)
 
 # from FuXi.Rete.IteratorAlgebra import identity
 # from FuXi.Rete.IteratorAlgebra import inner

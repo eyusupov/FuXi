@@ -11,7 +11,6 @@ from rdflib import (
 from rdflib.graph import Graph
 from rdflib.collection import Collection
 from rdflib.namespace import NamespaceManager
-from rdflib import py3compat
 
 try:
     from pydot import Node, Edge, Dot
@@ -62,7 +61,6 @@ def permu(xs):
                 yield [xs[i]] + p
 
 
-@py3compat.format_doctest_out
 def CollapseDictionary(mapping):
     """
     Takes a dictionary mapping prefixes to URIs
@@ -75,11 +73,11 @@ def CollapseDictionary(mapping):
     >>> len(a)
     2
     >>> a.values()
-    [rdflib.term.URIRef(%(u)s'http://example.com/'), rdflib.term.URIRef(%(u)s'http://example.com/')]
+    [rdflib.term.URIRef(us'http://example.com/'), rdflib.term.URIRef(us'http://example.com/')]
     >>> CollapseDictionary(a)
-    {'ex': rdflib.term.URIRef(%(u)s'http://example.com/')}
+    {'ex': rdflib.term.URIRef(us'http://example.com/')}
     >>> a
-    {'ex': rdflib.term.URIRef(%(u)s'http://example.com/'), '_1': rdflib.term.URIRef(%(u)s'http://example.com/')}
+    {'ex': rdflib.term.URIRef(us'http://example.com/'), '_1': rdflib.term.URIRef(us'http://example.com/')}
     """
     def originalPrefixes(item):
         return item.find('_') + 1 == 1

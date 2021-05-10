@@ -11,7 +11,6 @@ from rdflib import (
 from rdflib.store import Store
 from rdflib.graph import QuotedGraph, Graph
 from rdflib.namespace import NamespaceManager
-from rdflib import py3compat
 
 from .BuiltinPredicates import FILTERS
 try:
@@ -146,7 +145,7 @@ def SetupRuleStore(n3Stream=None, additionalBuiltins=None, makeNetwork=False):
 
 
 class N3RuleStore(Store):
-    doc = """
+    __doc__ = """
     A specialized Store which maintains order of statements
     and creates N3Filters, Rules, Formula objects, and other facts
     Ensures builtin filters refer to variables that have preceded
@@ -172,7 +171,7 @@ class N3RuleStore(Store):
     ... { ?X a owl:Class. ?X :prop1 ?M. ?X :prop2 ?N. ?N math:equalTo 3 } => { [] :selected (?M ?N) }.\"\"\"
     >>> g = g.parse(data=src, format='n3')
     >>> s._finalize()
-    >>> len([pred for subj, pred, obj in s.facts if pred == %(u)s'http://metacognition.info/FuXi/test#relatedTo']) #doctest: +SKIP
+    >>> len([pred for subj, pred, obj in s.facts if pred == us'http://metacognition.info/FuXi/test#relatedTo']) #doctest: +SKIP
     1
     >>> len(s.rules)
     1
@@ -181,7 +180,7 @@ class N3RuleStore(Store):
     >>> print(len(s.rules[0][RULE_RHS]))
     5
     >>> print(s.rules[0][RULE_LHS][1])
-    (?X, rdflib.term.URIRef(%(u)s'http://metacognition.info/FuXi/test#prop1'), ?M)
+    (?X, rdflib.term.URIRef(us'http://metacognition.info/FuXi/test#prop1'), ?M)
     >>> print(s.rules[0][RULE_LHS][-1])
     <http://www.w3.org/2000/10/swap/math#equalTo>(?N, 3)
 
@@ -269,8 +268,6 @@ BuiltIn used out of order
     >>> len(s.rules[1][-1])
     0
     """
-
-    __doc__ = py3compat.format_doctest_out(doc)
 
     context_aware = True
     formula_aware = True

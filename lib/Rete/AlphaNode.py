@@ -5,7 +5,6 @@ from rdflib import (
     Namespace,
     Variable,
 )
-from rdflib import py3compat
 
 from .Node import Node
 try:
@@ -112,15 +111,11 @@ class ReteToken:
 
     @memoize
     def concatenateTerms(terms):
-        if py3compat.PY3:
-            return reduce(lambda x, y: str(x) + str(y), [term[VALUE] for term in terms])
-        else:
-            return reduce(lambda x, y: unicode(x) + unicode(y), [term[VALUE] for term in terms])
+        return reduce(lambda x, y: str(x) + str(y), [term[VALUE] for term in terms])
 
     def __eq__(self, other):
         return hash(self) == hash(other)
 
-    @py3compat.format_doctest_out
     def alphaNetworkHash(self, termHash):
         """
         We store pointers to all the system's alpha memories in a hash table, indexed
@@ -131,7 +126,7 @@ class ReteToken:
         >>> aNode2 = AlphaNode((Variable('X'), RDF.type, Variable('C')))
         >>> token = ReteToken((URIRef('urn:uuid:Boo'), RDF.type, URIRef('urn:uuid:Foo')))
         >>> token.alphaNetworkHash(aNode1.alphaNetworkHash())
-        %(u)s'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+        us'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
 
         """
         triple = list(self.asTuple())
@@ -252,7 +247,6 @@ class AlphaNode(Node):
         self.builtin = bool(filters.get(self.triplePattern[PREDICATE]))
         self.universalTruths = []
 
-    @py3compat.format_doctest_out
     def alphaNetworkHash(self, groundTermHash=False, skolemTerms=[]):
         """
         Thus, given a WME w, to determine which alpha memories w should be added to, we need only check whether
@@ -269,7 +263,7 @@ class AlphaNode(Node):
         >>> aNode2.alphaNetworkHash()
         ('0', '0', '0')
         >>> aNode1.alphaNetworkHash(groundTermHash=True)
-        %(u)s'http://www.w3.org/1999/02/22-rdf-syntax-ns#typehttp://www.w3.org/2002/07/owl#InverseFunctionalProperty'
+        us'http://www.w3.org/1999/02/22-rdf-syntax-ns#typehttp://www.w3.org/2002/07/owl#InverseFunctionalProperty'
         """
         if groundTermHash:
             return ''.join([term for term in self.triplePattern

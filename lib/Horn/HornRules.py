@@ -23,7 +23,6 @@ from rdflib import(
     BNode,
     Variable,
 )
-from rdflib import py3compat
 try:
     from functools import reduce
 except ImportError:
@@ -243,7 +242,6 @@ class Rule(object):
                 return False
         return True
 
-    @py3compat.format_doctest_out
     def n3(self):
         """
         Render a rule as N3 (careful to use e:tuple (_: ?X) skolem functions for existentials in the head)
@@ -252,7 +250,7 @@ class Rule(object):
         ...                      Uniterm(RDF.type, [Variable('M'), Variable('C')])]),
         ...                 Uniterm(RDF.type, [Variable('M'), Variable('SC')]))
         >>> Rule(clause, [Variable('M'), Variable('SC'), Variable('C')]).n3()
-        %(u)s'{ ?C rdfs:subClassOf ?SC .\\n ?M a ?C } => { ?M a ?SC }'
+        us'{ ?C rdfs:subClassOf ?SC .\\n ?M a ?C } => { ?M a ?SC }'
 
         """
         return u'{ %s } => { %s }' % (self.formula.body.n3(),

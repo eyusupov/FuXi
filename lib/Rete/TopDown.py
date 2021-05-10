@@ -46,7 +46,6 @@ from rdflib import (
 from rdflib.util import first
 from rdflib.graph import ReadOnlyGraphAggregate
 from rdflib.namespace import split_uri
-from rdflib import py3compat
 try:
     from functools import reduce
 except ImportError:
@@ -438,8 +437,7 @@ def invokeRule(priorAnswers,
             # Continue processing rule body condition
             # one literal at a time
             try:
-                bodyLiteral = next(
-                    bodyLiteralIterator) if py3compat.PY3 else bodyLiteralIterator.next()
+                bodyLiteral = next(bodyLiteralIterator)
                 # if a N3 builtin, execute it using given bindings for boolean answer
                 # builtins are moved to end of rule when evaluating rules via
                 # sip

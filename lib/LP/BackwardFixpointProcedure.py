@@ -39,7 +39,6 @@ from pprint import pprint
 
 from rdflib.graph import ReadOnlyGraphAggregate
 from rdflib import Literal, Namespace, RDF, Variable, URIRef
-from rdflib import py3compat
 from rdflib.util import first
 
 from FuXi.SPARQL import EDBQuery, EDBQueryFromBodyIterator, ConjunctiveQueryMemoize
@@ -127,7 +126,7 @@ class MalformedQeryPredicate(Exception):
 def coroutine(func):
     def start(*args, **kwargs):
         cr = func(*args, **kwargs)
-        next(cr) if py3compat.PY3 else cr.next()
+        next(cr)
         return cr
     return start
 

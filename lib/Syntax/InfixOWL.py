@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from rdflib import py3compat
 
-__doc__ = py3compat.format_doctest_out("""\
+__doc__ = """\
 RDFLib Python binding for OWL Abstract Syntax
 
 see: http://www.w3.org/TR/owl-semantics/syntax.html
@@ -108,7 +107,7 @@ Restrictions can also be created using Manchester OWL syntax in
 
 #>>> print(g.serialize(format='pretty-xml'))
 
-""")
+"""
 
 import itertools
 from rdflib import Namespace, RDF, RDFS, URIRef, BNode, Literal, Variable
@@ -1178,7 +1177,7 @@ class Class(AnnotatibleTerms):
                 exprs[-1] = "\n    " + exprs[-1]
         if ec:
             nec_SuffStatements = [
-                isinstance(s, str if py3compat.PY3 else basestring) and s or
+                isinstance(s, str) and s or
                 manchesterSyntax(classOrIdentifier(s), self.graph) for s in ec]
             if nec_SuffStatements:
                 klassKind = "A Defined Class %s" % label
@@ -1277,7 +1276,7 @@ class OWLRDFListProxy(object):
 
 
 class EnumeratedClass(OWLRDFListProxy, Class):
-    doc = """
+    __doc__ = """
     Class for owl:oneOf forms:
 
     OWL Abstract Syntax is used
@@ -1300,9 +1299,8 @@ class EnumeratedClass(OWLRDFListProxy, Class):
     { ex:chime ex:uche ex:ejike }
     >>> col = Collection(g, first(g.objects(predicate=OWL_NS.oneOf, subject=ogbujiBros.identifier)))
     >>> [g.qname(item) for item in col]
-    [%(u)s'ex:chime', %(u)s'ex:uche', %(u)s'ex:ejike']
+    [us'ex:chime', us'ex:uche', us'ex:ejike']
     """
-    __doc__ = py3compat.format_doctest_out(doc)
 
     _operator = OWL_NS.oneOf
 
@@ -1557,7 +1555,6 @@ class Restriction(Class):
             self.graph.add((self.identifier, RDF.type, OWL_NS.Restriction))
             self.graph.remove((self.identifier, RDF.type, OWL_NS.Class))
 
-    @py3compat.format_doctest_out
     def serialize(self, graph):
         """
         >>> g1 = Graph()
@@ -1575,7 +1572,7 @@ class Restriction(Class):
         >>> restr1.serialize(g2)
         >>> Individual.factoryGraph = g2
         >>> list(Property(EX.someProp, baseType=None).type)
-        [rdflib.term.URIRef(%(u)s'http://www.w3.org/2002/07/owl#DatatypeProperty')]
+        [rdflib.term.URIRef(us'http://www.w3.org/2002/07/owl#DatatypeProperty')]
         """
 
         Property(self.onProperty, graph=self.graph, baseType=None).serialize(

@@ -60,7 +60,7 @@ def extractBaseFacts(cg):
 
 
 def build_network(rules):
-    if isinstance(rules, basestring):
+    if isinstance(rules, str):
         rules = StringIO(rules)
     graph = ConjunctiveGraph()
     graph.load(rules, publicID='test', format='n3')
