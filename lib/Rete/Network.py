@@ -764,36 +764,33 @@ class ReteNetwork:
         """
         matchedPatterns = HashablePatternList()
         attachedPatterns = []
+        emptyHashablePatternList = HashablePatternList([None])
         # hasBuiltin = False
         for currentPattern in lhsIterator:
-            # We need to convert the Uniterm into a triple
             if isinstance(currentPattern, Uniterm):
                 currentPattern = currentPattern.toRDFTuple()
-            if HashablePatternList([currentPattern]) in self.nodes:
+            currentHashablePatternList = HashablePatternList([currentPattern])
+            if currentHashablePatternList in self.nodes:
                 # Current pattern matches an existing alpha node
                 matchedPatterns.append(currentPattern)
             elif matchedPatterns in self.nodes:
                 # preceding patterns match an existing join/beta node
                 newNode = self.createAlphaNode(currentPattern)
+                paddedLHSPattern = emptyHashablePatternList + matchedPatterns
                 if len(matchedPatterns) == 1 \
-                        and HashablePatternList([None]) + matchedPatterns in self.nodes:
-                    existingNode = self.nodes[
-                        HashablePatternList([None]) + matchedPatterns]
+                        and paddedLHSPattern in self.nodes:
+                    existingNode = self.nodes[paddedLHSPattern]
                     newBetaNode = BetaNode(existingNode, newNode)
-                    self.nodes[HashablePatternList([None]) +
-                               matchedPatterns +
-                               HashablePatternList([currentPattern])] = newBetaNode
-                    matchedPatterns = HashablePatternList([None]) + \
-                        matchedPatterns + \
-                        HashablePatternList([currentPattern])
+                    matchedPatterns = paddedLHSPattern + \
+                        currentHashablePatternList
+                    self.nodes[matchedPatterns] = newBetaNode
                 else:
                     existingNode = self.nodes[matchedPatterns]
                     newBetaNode = BetaNode(existingNode, newNode)
-                    self.nodes[matchedPatterns +
-                               HashablePatternList([currentPattern])] = newBetaNode
                     matchedPatterns.append(currentPattern)
+                    self.nodes[matchedPatterns] = newBetaNode
 
-                self.nodes[HashablePatternList([currentPattern])] = newNode
+                self.nodes[currentHashablePatternList] = newNode
                 newBetaNode.connectIncomingNodes(existingNode, newNode)
                 # Extend the match list with the current pattern and add it
                 # to the list of attached patterns for the second pass
@@ -803,14 +800,13 @@ class ReteNetwork:
                 # The current pattern is not in the network and the match list isn't
                 # either.  Add an alpha node
                 newNode = self.createAlphaNode(currentPattern)
-                self.nodes[HashablePatternList([currentPattern])] = newNode
+                self.nodes[currentHashablePatternList] = newNode
                 # Add to list of attached patterns for the second pass
-                attachedPatterns.append(HashablePatternList([currentPattern]))
+                attachedPatterns.append(currentHashablePatternList)
 
         # The LHS is done, need to initiate second pass to recursively build join / beta
         # nodes towards a terminal node
 
-        # We need to convert the Uniterm into a triple
         consequents = [
             isinstance(fact, Uniterm) and fact.toRDFTuple() or fact for fact in rhsIterator]
         if matchedPatterns and matchedPatterns in self.nodes:
@@ -823,8 +819,7 @@ class ReteNetwork:
             if isinstance(node, BetaNode):
                 terminalNode = node
             else:
-                paddedLHSPattern = HashablePatternList(
-                    [None]) + attachedPatterns[0]
+                paddedLHSPattern = emptyHashablePatternList + attachedPatterns[0]
                 terminalNode = self.nodes.get(paddedLHSPattern)
                 if terminalNode is None:
                     # New terminal node
@@ -842,7 +837,7 @@ class ReteNetwork:
             moveToEnd = []
             # endIdx = len(attachedPatterns) - 1
             finalPatternList = []
-            for idx, pattern in enumerate(attachedPatterns):
+            for pattern in attachedPatterns:
                 assert isinstance(
                     pattern, HashablePatternList), repr(pattern)
                 currNode = self.nodes[pattern]
