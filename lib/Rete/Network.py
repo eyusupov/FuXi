@@ -225,7 +225,6 @@ class ReteNetwork:
         self.name = name and name or BNode()
         self.nodes = {}
         self.alphaPatternHash = {}
-        self.ruleSet = set()
         for alphaPattern in xcombine(('1', '0'), ('1', '0'), ('1', '0')):
             self.alphaPatternHash[tuple(alphaPattern)] = {}
         if inferredTarget is None:
