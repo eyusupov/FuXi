@@ -32,7 +32,7 @@ config = dict(
         "Natural Language :: English",
        ],
     package_dir={
-        'FuXi': 'lib',
+        'FuXi': 'FuXi',
     },
     packages=[
         "FuXi",
