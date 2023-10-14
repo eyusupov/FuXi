@@ -8,33 +8,6 @@ except:
     pass
 
 
-def setup_python3():
-    # Taken from "distribute" setup.py
-    from distutils.filelist import FileList
-    from distutils import dir_util, file_util, util, log
-    from os.path import join
-
-    tmp_src = join("build", "src")
-    log.set_verbosity(1)
-    fl = FileList()
-    for line in open("MANIFEST.in"):
-        if not line.strip():
-            continue
-        fl.process_template_line(line)
-    dir_util.create_tree(tmp_src, fl.files)
-    outfiles_2to3 = []
-    for f in fl.files:
-        outf, copied = file_util.copy_file(f, join(tmp_src, f), update=1)
-        if copied and outf.endswith(".py"):
-            outfiles_2to3.append(outf)
-
-    util.run_2to3(outfiles_2to3)
-
-    # arrange setup to use the copy
-    sys.path.insert(0, tmp_src)
-
-    return tmp_src
-
 config = dict(
     name="FuXi",
     version="1.4",
@@ -83,16 +56,10 @@ config = dict(
 )
 
 kwargs = {}
-if sys.version_info[0] >= 3:
+try:
     from setuptools import setup
     assert setup
-    kwargs['use_2to3'] = True
-    kwargs['src_root'] = setup_python3()
-else:
-    try:
-        from setuptools import setup
-        assert setup
-    except ImportError:
-        from distutils.core import setup
+except ImportError:
+    from distutils.core import setup
 
 setup(**config)
