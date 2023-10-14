@@ -13,10 +13,10 @@ from rdflib import (
     Variable,
 )
 from FuXi.Rete.RuleStore import SetupRuleStore
-from rdflib.extras.infixowl import OWL_NS
 from FuXi.Horn.HornRules import HornFromN3
 from FuXi.SPARQL.BackwardChainingStore import TopDownSPARQLEntailingStore
 
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 EX = Namespace('http://example.org/')
 
 FACTS = """\

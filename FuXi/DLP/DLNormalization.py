@@ -15,7 +15,6 @@ from rdflib.extras.infixowl import Class
 from rdflib.extras.infixowl import ClassNamespaceFactory
 from rdflib.extras.infixowl import EnumeratedClass
 from rdflib.extras.infixowl import Individual
-from rdflib.extras.infixowl import OWL_NS
 from rdflib.extras.infixowl import Property
 from rdflib.extras.infixowl import Restriction
 from rdflib.extras.infixowl import only
@@ -207,6 +206,8 @@ def NormalFormReduction(ontGraph):
     DoubleNegativeTransformer().transform(ontGraph)
     ConjunctionFlattener().transform(ontGraph)
 
+
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 EX_NS = Namespace('http://example.com/')
 EX = ClassNamespaceFactory(EX_NS)
 

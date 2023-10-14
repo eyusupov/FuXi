@@ -1,5 +1,5 @@
-from rdflib import Graph, RDF, URIRef
-from rdflib.extras.infixowl import OWL_NS, Class
+from rdflib import Graph, RDF, URIRef, Namespace
+from rdflib.extras.infixowl import Class
 
 # local source:
 # galenGraph = Graph().parse(
@@ -12,6 +12,8 @@ galenGraph = Graph().parse(
     format="xml")
 
 graph = galenGraph
+
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 
 with open('GALEN-CABG-Segment.asc', 'w') as fp:
     for c in graph.subjects(predicate=RDF.type, object=OWL_NS.Class):

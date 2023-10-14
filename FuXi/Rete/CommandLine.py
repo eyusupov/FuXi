@@ -18,7 +18,6 @@ from rdflib.extras.infixowl import AllClasses
 from rdflib.extras.infixowl import AllProperties
 from rdflib.extras.infixowl import Class
 from rdflib.extras.infixowl import Individual
-from rdflib.extras.infixowl import OWL_NS
 from rdflib.extras.infixowl import Property
 
 from rdflib.graph import Graph
@@ -42,6 +41,7 @@ from rdflib.util import first
 #     'rdflib.plugins.sparql.processor', 'SPARQLResult')
 
 
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 TEMPLATES = Namespace(
     'http://code.google.com/p/fuxi/wiki/BuiltinSPARQLTemplates#')
 

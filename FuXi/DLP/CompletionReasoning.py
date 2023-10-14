@@ -32,7 +32,6 @@ from rdflib.extras.infixowl import CastClass
 from rdflib.extras.infixowl import Class
 from rdflib.extras.infixowl import ClassNamespaceFactory
 from rdflib.extras.infixowl import Individual
-from rdflib.extras.infixowl import OWL_NS
 from rdflib.extras.infixowl import Property
 from rdflib.extras.infixowl import Restriction
 from rdflib.extras.infixowl import some
@@ -58,6 +57,7 @@ except ImportError:
 import logging
 log = logging.getLogger(__name__)
 
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 LIST_NS = Namespace('http://www.w3.org/2000/10/swap/list#')
 KOR_NS = Namespace('http://korrekt.org/')
 EX_NS = Namespace('http://example.com/')

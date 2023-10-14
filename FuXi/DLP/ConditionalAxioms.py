@@ -82,8 +82,9 @@ def AdditionalRules(tBox):
     except ImportError:
         from io import StringIO
 
-    from rdflib import RDF
-    from rdflib.extras.infixowl import OWL_NS
+    from rdflib import RDF, Namespace
+
+    OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 
     ruleSrc = set()
     addListSemantics = False

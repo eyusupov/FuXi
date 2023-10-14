@@ -4,13 +4,13 @@ import unittest
 from rdflib.extras.infixowl import BooleanClass
 from rdflib.extras.infixowl import Class
 from rdflib.extras.infixowl import Individual
-from rdflib.extras.infixowl import OWL_NS
 from FuXi.Rete.Network import ReteNetwork
 from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.DLP import SKOLEMIZED_CLASS_NS
 from rdflib.graph import Graph
 from rdflib import Namespace
 
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 EX = Namespace('http://example.com#')
 
 

@@ -7,7 +7,6 @@ from rdflib.extras.infixowl import Class
 from rdflib.extras.infixowl import Individual
 from rdflib.extras.infixowl import CastClass
 from rdflib.extras.infixowl import classOrIdentifier
-from rdflib.extras.infixowl import OWL_NS
 from rdflib.graph import Graph
 from rdflib.namespace import NamespaceManager
 from rdflib import RDF, Namespace
@@ -16,6 +15,8 @@ from rdflib.util import first
 DATALOG_SAFETY_NONE = 0
 DATALOG_SAFETY_STRICT = 1
 DATALOG_SAFETY_LOOSE = 2
+
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 
 safetyNameMap = {
     'none': DATALOG_SAFETY_NONE,

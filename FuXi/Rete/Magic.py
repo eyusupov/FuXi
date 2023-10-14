@@ -57,7 +57,6 @@ from FuXi.Rete.SidewaysInformationPassing import IncomingSIPArcs
 from FuXi.Rete.SidewaysInformationPassing import iterCondition
 from FuXi.Rete.SidewaysInformationPassing import SetOp
 from FuXi.Rete.SidewaysInformationPassing import SIPRepresentation
-from rdflib.extras.infixowl import OWL_NS
 
 from rdflib import (
     Graph,
@@ -74,6 +73,7 @@ from rdflib.plugins.sparql.parser import parseQuery
 from rdflib.plugins.sparql.sparql import Query as sparqlQuery
 
 
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 EX_ULMAN = Namespace('http://doi.acm.org/10.1145/6012.15399#')
 LOG_NS = Namespace("http://www.w3.org/2000/10/swap/log#")
 MAGIC = Namespace('http://doi.acm.org/10.1145/28659.28689#')

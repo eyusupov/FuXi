@@ -21,8 +21,9 @@ from FuXi.SPARQL.BackwardChainingStore import (
     TopDownSPARQLEntailingStore,
     BFP_METHOD,
 )
-from rdflib.extras.infixowl import OWL_NS
 
+
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 
 EX_ONT = """\
 @prefix first: <http://www.w3.org/2002/03owlt/intersectionOf/premises001#>.
