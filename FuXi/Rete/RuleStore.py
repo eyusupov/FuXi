@@ -81,6 +81,9 @@ class N3Builtin(object):
                 self.argument, Variable) and '?%s' % self.argument or self.argument,
             isinstance(self.result, Variable) and '?%s' % self.result or self.result)
 
+    def n3(self):
+        return "%s %s %s" % (self.argument.n3(), self.uri.n3(), self.result.n3())
+
 
 class Formula(object):
 
@@ -147,7 +150,7 @@ def SetupRuleStore(n3Stream=None, additionalBuiltins=None, makeNetwork=False):
 class N3RuleStore(Store):
     __doc__ = """
     A specialized Store which maintains order of statements
-    and creates N3Filters, Rules, Formula objects, and other facts
+    and creates N3Builtins, Rules, Formula objects, and other facts
     Ensures builtin filters refer to variables that have preceded
 
     >>> s = N3RuleStore()
