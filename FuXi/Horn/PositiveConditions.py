@@ -586,7 +586,7 @@ class PredicateExtentFactory(object):
         self.newNss = newNss
 
     def term(self, name):
-        from FuXi.Syntax.infixOWL import Class
+        from rdflib.extras.infixowl import Class
         return Class(URIRef(self + name))
 
     def __getitem__(self, args):
