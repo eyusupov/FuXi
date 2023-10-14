@@ -663,18 +663,9 @@ def main():
                                               base=None))
 
 if __name__ == '__main__':
-    from hotshot import Profile, stats
     # import pycallgraph
     # pycallgraph.start_trace()
     # main()
     # pycallgraph.make_dot_graph('FuXi-timing.png')
     # sys.exit(1)
-    p = Profile('fuxi.profile')
-    p.runcall(main)
-    p.close()
-    s = stats.load('fuxi.profile')
-    s.strip_dirs()
-    s.sort_stats('time', 'cumulative', 'pcalls')
-    s.print_stats(.05)
-    s.print_callers(.01)
-    s.print_callees(.01)
+    main()
