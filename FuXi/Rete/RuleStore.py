@@ -389,8 +389,8 @@ BuiltIn used out of order
                 self.rootFormula = context.identifier
             if predicate == LOG.implies:
                 self.rules.append(
-                    (isinstance(subject, URIRef) and subject or subject.identifier,
-                     isinstance(obj, (URIRef, Literal)) and obj or obj.identifier))
+                    (subject if isinstance(subject, URIRef) else subject.identifier,
+                     obj if isinstance(obj, (URIRef, Literal)) else obj.identifier))
             else:
                 self.facts.append((subject, predicate, obj))
         else:
@@ -423,7 +423,7 @@ BuiltIn used out of order
             for pattern in lhs:
                 if not isinstance(pattern, N3Builtin):
                     _hashList = [
-                        isinstance(term, (Variable, BNode)) and '\t' or term for term in pattern]
+                        '\t' if isinstance(term, (Variable, BNode)) else term for term in pattern]
                     patternDict.setdefault(
                         reduce(lambda x, y: x + y, _hashList), set()).add(pattern)
         for key, vals in list(patternDict.items()):
