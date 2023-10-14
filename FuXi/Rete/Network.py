@@ -301,7 +301,7 @@ class ReteNetwork:
             assert isinstance(term, Uniterm)
             rhs_formula.append(term.toRDFTuple())
         if emptyHead:
-            if filters:
+            if aFilter:
                 assert nonEmptyHead, "Filters must conclude something."
             else:
                 import warnings
