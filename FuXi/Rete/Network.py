@@ -135,7 +135,7 @@ class HashablePatternList(object):
                 out.extend([i for i in item
                             if not self.skipBNodes or not isinstance(i, BNode)])
             elif isinstance(item, N3Builtin):
-                out.extend([item.argument, item.result])
+                out.extend([item.argument, item.uri, item.result])
             else:
                 raise NotImplementedError("don't know how to hash %r" % item)
 
@@ -652,12 +652,13 @@ class ReteNetwork:
             node = BuiltInAlphaNode(currentPattern)
             self.alphaBuiltinNodes.append(node)
         else:
-            node = AlphaNode(currentPattern, self.ruleStore.filters)
-            if not isinstance(node, BuiltInAlphaNode) and node.builtin:
-                s, p, o = currentPattern
+            s, p, o = currentPattern
+            if p in self.ruleStore.filters:
                 node = BuiltInAlphaNode(
                     N3Builtin(p, self.ruleStore.filters[p](s, o), s, o))
                 self.alphaBuiltinNodes.append(node)
+            else:
+                node = AlphaNode(currentPattern, self.ruleStore.filters)
         self.alphaPatternHash[node.alphaNetworkHash()].setdefault(
             node.alphaNetworkHash(groundTermHash=True), []).append(node)
         self.alphaNodes.append(node)
