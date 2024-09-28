@@ -1,16 +1,16 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 import unittest
-from FuXi.Syntax.InfixOWL import BooleanClass
-from FuXi.Syntax.InfixOWL import Class
-from FuXi.Syntax.InfixOWL import Individual
-from FuXi.Syntax.InfixOWL import OWL_NS
+from rdflib.extras.infixowl import BooleanClass
+from rdflib.extras.infixowl import Class
+from rdflib.extras.infixowl import Individual
 from FuXi.Rete.Network import ReteNetwork
 from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.DLP import SKOLEMIZED_CLASS_NS
 from rdflib.graph import Graph
 from rdflib import Namespace
 
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 EX = Namespace('http://example.com#')
 
 
@@ -37,7 +37,7 @@ class UnionSkolemizedTest(unittest.TestCase):
         p = network.setupDescriptionLogicProgramming(self.tBoxGraph)
         for p in p:
             if hasattr(p.formula.body, 'arg'):
-                self.failIf(
+                self.assertFalse(
                     p.formula.body.arg[-1].find(SKOLEMIZED_CLASS_NS) > -1,
                     "Rule has a skolem term when it shouldn't!: %s" % p)
             else:

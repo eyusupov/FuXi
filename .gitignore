@@ -8,3 +8,4 @@ FuXi.sublime-*
 *__pycache__
 test/coverage*
 docs/_build*
+test/OWL/*

@@ -20,7 +20,7 @@ class NetworkReset(unittest.TestCase):
     def testReset(self):
         newInferredFacts = Graph()
         self.network.reset(newInferredFacts)
-        self.failUnless(newInferredFacts is self.network.inferredFacts)
+        self.assertTrue(newInferredFacts is self.network.inferredFacts)
 
 if __name__ == '__main__':
     unittest.main()

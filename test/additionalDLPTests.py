@@ -3,7 +3,7 @@ from rdflib.graph import Graph
 from rdflib import Namespace
 from rdflib.util import first
 from FuXi.Rete.RuleStore import SetupRuleStore
-from FuXi.Syntax.InfixOWL import (
+from rdflib.extras.infixowl import (
     OWL_NS,
     Class,
     ClassNamespaceFactory,
@@ -131,7 +131,7 @@ class AdditionalDescriptionLogicTests(unittest.TestCase):
             else:
                 self.assertEqual(len(rule.formula.body), 2)
                 skolemPredicate = rule.formula.head.arg[-1]
-                self.failUnless(
+                self.assertTrue(
                     skolemPredicate.find(SKOLEMIZED_CLASS_NS) != -1,
                     "Head should be a unary skolem predicate")
                 skolemPredicate = skolemPredicate[0]
@@ -167,11 +167,11 @@ class AdditionalDescriptionLogicTests(unittest.TestCase):
                 EX_NS.CoronaryBypassConduit_internal_thoracic_artery_left_insitu,
                 EX_NS.CoronaryBypassConduit_internal_thoracic_artery_left_free]))
         from FuXi.DLP.DLNormalization import NormalFormReduction
-        self.assertEquals(
+        self.assertEqual(
             repr(Class(first(ITALeft.subSumpteeIds()))),
             "Some Class SubClassOf: Class: ex:ITALeft ")
         NormalFormReduction(self.ontGraph)
-        self.assertEquals(
+        self.assertEqual(
             repr(Class(first(ITALeft.subSumpteeIds()))),
             'Some Class SubClassOf: Class: ex:ITALeft  . EquivalentTo: ( ( ex:hasCoronaryBypassConduit VALUE <http://example.com/CoronaryBypassConduit_internal_thoracic_artery_left_insitu> ) OR ( ex:hasCoronaryBypassConduit VALUE <http://example.com/CoronaryBypassConduit_internal_thoracic_artery_left_free> ) )')
 

@@ -2,15 +2,15 @@ from rdflib import (
     Graph,
     Literal,
     )
-from FuXi.Syntax.InfixOWL import (
+from rdflib.extras.infixowl import (
     Class,
     EnumeratedClass,
     OWL_NS,
     Property,
     Restriction,
     )
-from FuXi.Syntax.InfixOWL import some
-from FuXi.Syntax.InfixOWL import max
+from rdflib.extras.infixowl import some
+from rdflib.extras.infixowl import max
 
 from rdflib.namespace import (
     Namespace,

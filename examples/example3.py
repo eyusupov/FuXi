@@ -5,11 +5,11 @@ from rdflib import Namespace
 from pprint import pprint
 
 famNs = Namespace('http://dev.w3.org/2000/10/swap/test/cwm/fam.n3#')
-nsMapping = {u'fam': famNs}
+nsMapping = {'fam': famNs}
 rules = HornFromN3('http://dev.w3.org/2000/10/swap/test/cwm/fam-rules.n3')
 factGraph = Graph().parse(
     'http://dev.w3.org/2000/10/swap/test/cwm/fam.n3', format='n3')
-factGraph.bind(u'fam', famNs)
+factGraph.bind('fam', famNs)
 print(factGraph.serialize(format="n3"))
 
 dPreds = [famNs.ancestor]
@@ -20,7 +20,7 @@ topDownStore = TopDownSPARQLEntailingStore(
                 derivedPredicates=dPreds,
                 nsBindings=nsMapping)
 targetGraph = Graph(topDownStore)
-targetGraph.bind(u'ex', famNs)
+targetGraph.bind('ex', famNs)
 pprint(list(
     targetGraph.query(
         'SELECT ?ANCESTOR { fam:david fam:ancestor ?ANCESTOR }',

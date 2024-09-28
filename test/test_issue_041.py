@@ -14,9 +14,9 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
-rule_fixture = u"""\
+rule_fixture = """\
 @prefix test: <http://example.org/>.
 
 { ?x a ?y } => {

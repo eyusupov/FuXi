@@ -6,20 +6,20 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 from rdflib.graph import Graph
 from rdflib import (
     Namespace,
     Variable,
 )
 from FuXi.Rete.RuleStore import SetupRuleStore
-from FuXi.Syntax.InfixOWL import OWL_NS
 from FuXi.Horn.HornRules import HornFromN3
 from FuXi.SPARQL.BackwardChainingStore import TopDownSPARQLEntailingStore
 
+OWL_NS = Namespace("http://www.w3.org/2002/07/owl#")
 EX = Namespace('http://example.org/')
 
-FACTS = u"""\
+FACTS = """\
 @prefix ex: <http://example.org/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 
@@ -29,7 +29,7 @@ ex:bar ex:y "yyyy";
        owl:sameAs ex:baz .
 """
 
-RULES = u"""\
+RULES = """\
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 
 { ?x owl:sameAs ?y } => { ?y owl:sameAs ?x } .
@@ -65,7 +65,7 @@ class test_sameAs(unittest.TestCase):
 
     def testTransitivity(self):
         raise SkipTest("SKIPFAIL testTransitivity, see test/test_sameAs.py")
-        nsBindings = {u'owl': OWL_NS, u'ex': EX}
+        nsBindings = {'owl': OWL_NS, 'ex': EX}
         topDownStore = TopDownSPARQLEntailingStore(
             self.graph.store,
             self.graph,
@@ -75,10 +75,10 @@ class test_sameAs(unittest.TestCase):
             nsBindings=nsBindings,
             hybridPredicates=[OWL_NS.sameAs])
         targetGraph = Graph(topDownStore)
-        for query, solns in QUERIES.items():
+        for query, solns in list(QUERIES.items()):
             result = set(targetGraph.query(query, initNs=nsBindings))
             print(query, result)
-            self.failUnless(not solns.difference(result))
+            self.assertTrue(not solns.difference(result))
 
     # def testSmushing(self):
         # sipCollection = PrepareSipCollection(self.graph.adornedProgram)

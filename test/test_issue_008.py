@@ -12,7 +12,7 @@ try:
     from io import StringIO
     assert StringIO
 except ImportError:
-    from cStringIO import StringIO
+    from io import StringIO
 
 rules = """\
 @prefix : <fam.n3#>.
@@ -60,7 +60,7 @@ class TestUnitestAction(unittest.TestCase):
             '''SELECT ?a { fam:david fam:ancestor ?a }''',
             initNs=self.nsMapping)
         # print("Len results: {}".format(len(list(res))))
-        assert len(list(res)) is 0
+        assert len(list(res)) == 0
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestUnitestAction)
